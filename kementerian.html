@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kementerian | BEM KEMA TUS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <div id="site-header"></div>
+
+  <!-- Mode DAFTAR: tampil saat tidak ada ?id= di URL -->
+  <div id="kementerian-intro" class="page-hero">
+    <div class="ghost" aria-hidden="true">12 Kem</div>
+    <div class="container">
+      <span class="eyebrow on-dark">Kabinet Aksarakestra</span>
+      <h1>Kementerian</h1>
+      <p>Dua belas kementerian dengan fokus kerja masing-masing, terkelompok di bawah empat kemenko. Klik untuk melihat profil lengkapnya.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div id="kementerian-list"></div>
+    </div>
+  </section>
+
+  <!-- Mode DETAIL: konten dirender oleh JS berdasarkan ?id= -->
+  <div id="kementerian-detail"></div>
+
+  <div id="site-footer"></div>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kegiatan | BEM KEMA TUS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <div id="site-header"></div>
+
+  <div class="page-hero">
+    <div class="ghost" aria-hidden="true">Chronicles</div>
+    <div class="container">
+      <span class="eyebrow on-dark">01 / Program &amp; Dokumentasi</span>
+      <h1>Vanguard<br><span class="outline">Chronicles</span></h1>
+      <p>Jelajahi rangkaian agenda strategis dan abadikan momen berharga perjalanan BEM KEMA Telkom University Surabaya.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="toolbar">
+        <div class="chip-row" id="kegiatan-filter">
+          <button class="chip active" data-kategori="semua">Semua Agenda</button>
+          <button class="chip" data-kategori="seminar">Seminar</button>
+          <button class="chip" data-kategori="sosial">Sosial</button>
+          <button class="chip" data-kategori="internal">Internal</button>
+          <button class="chip" data-kategori="penristek">Penristek</button>
+        </div>
+        <label class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="search" id="kegiatan-search" placeholder="Cari kegiatan...">
+        </label>
+      </div>
+      <p id="kegiatan-result" style="font-size:.82rem;font-weight:700;color:var(--muted);margin:-1.4rem 0 1.4rem"></p>
+      <div class="cards-3" id="kegiatan-grid"></div>
+    </div>
+  </section>
+
+  <div id="site-footer"></div>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

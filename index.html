@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BEM KEMA TUS | The Academic Vanguard</title>
+  <meta name="description" content="Website resmi BEM KEMA Telkom University Surabaya. Wadah aspirasi mahasiswa yang progresif, inklusif, dan berintegritas.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <div id="site-header"></div>
+
+  <!-- ===== HERO ===== -->
+  <header class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="hero-badge rise d1"><span class="dot"></span> Kabinet Aksarakestra 2024</span>
+        <h1>
+          <span class="line rise d1">BEM KEMA</span>
+          <span class="line rise d2">Telkom University</span>
+          <span class="line outline rise d3">Surabaya</span>
+        </h1>
+        <p class="lead rise d3">Mewujudkan kampus progresif, kritis, dan berintegritas sebagai pusat pengabdian dan inovasi mahasiswa.</p>
+        <div class="hero-actions rise d4">
+          <a href="kegiatan.html" class="btn btn-light">Lihat Program Kerja
+            <svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href="kementerian.html" class="btn btn-ghost">Jelajahi Kementerian</a>
+        </div>
+      </div>
+      <div class="hero-visual rise d3">
+        <div class="hero-frame">
+          <!-- Ganti div ini dengan <img src="assets/img/hero.jpg" class="hero-photo"> saat foto siap -->
+          <div class="img-ph dark hero-photo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-4.5-4.5L7 20"/></svg>
+          </div>
+        </div>
+        <div class="hero-stat">
+          <div class="label">Ekosistem KEMA TUS</div>
+          <div class="value" data-count="5000" data-suffix="+">0</div>
+          <div class="sub">Mahasiswa aktif yang kami naungi</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== MARQUEE ===== -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>Progresif <em>&#9679;</em> Kritis <em>&#9679;</em> Berintegritas <em>&#9679;</em> The Academic Vanguard <em>&#9679;</em> Aksarakestra <em>&#9679;</em></span>
+      <span>Progresif <em>&#9679;</em> Kritis <em>&#9679;</em> Berintegritas <em>&#9679;</em> The Academic Vanguard <em>&#9679;</em> Aksarakestra <em>&#9679;</em></span>
+    </div>
+  </div>
+
+  <!-- ===== VISI MISI ===== -->
+  <section class="section">
+    <div class="container vm-grid">
+      <div class="vm-block reveal">
+        <span class="eyebrow">Visi Kami</span>
+        <h2>Arah<br>Perjuangan</h2>
+        <div class="visi-card">
+          Menjadikan BEM KEMA Telkom University Surabaya sebagai <strong>wadah aspirasi</strong> yang progresif, inklusif, dan berintegritas demi <strong>kemajuan institusi dan bangsa</strong>.
+        </div>
+      </div>
+      <div class="vm-block reveal">
+        <span class="eyebrow">Misi Kami</span>
+        <h2>Tiga Pilar<br>Gerakan</h2>
+        <div class="misi-item">
+          <div class="misi-num">01</div>
+          <div>
+            <h4>Advokasi Responsif</h4>
+            <p>Membangun sistem advokasi mahasiswa yang cepat, tanggap, dan solutif terhadap seluruh isu akademik maupun non-akademik.</p>
+          </div>
+        </div>
+        <div class="misi-item">
+          <div class="misi-num">02</div>
+          <div>
+            <h4>Pengembangan Kompetensi &amp; Riset</h4>
+            <p>Melalui Kementerian Penristek, kami fokus pada pengembangan riset dan teknologi mahasiswa guna inovasi berkelanjutan.</p>
+          </div>
+        </div>
+        <div class="misi-item">
+          <div class="misi-num">03</div>
+          <div>
+            <h4>Sinergi Kolaborasi</h4>
+            <p>Memperkuat hubungan harmonis dan kolaboratif antara organisasi mahasiswa di lingkungan internal maupun eksternal kampus.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== KEGIATAN MENDATANG ===== -->
+  <section class="section white">
+    <div class="container">
+      <div class="toolbar">
+        <div>
+          <span class="eyebrow">Calendar of Events</span>
+          <h2 class="display" style="font-size:clamp(1.8rem,3.4vw,2.5rem);margin-top:.4rem">Kegiatan Mendatang</h2>
+        </div>
+        <div class="chip-row" id="home-filter">
+          <button class="chip active" data-kategori="semua">Semua</button>
+          <button class="chip" data-kategori="seminar">Akademik</button>
+          <button class="chip" data-kategori="sosial">Sosial</button>
+          <button class="chip" data-kategori="penristek">Penristek</button>
+        </div>
+      </div>
+      <div class="cards-3" id="home-kegiatan"></div>
+      <div style="text-align:center;margin-top:2.8rem">
+        <a href="kegiatan.html" class="btn btn-outline">Lihat Semua Kegiatan
+          <svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== STATISTIK ===== -->
+  <section class="section" style="padding-bottom:0">
+    <div class="container">
+      <div class="stats-strip reveal">
+        <div><div class="value" data-count="12">0</div><div class="label">Kementerian</div></div>
+        <div><div class="value" data-count="4">0</div><div class="label">Kemenko</div></div>
+        <div><div class="value" data-count="30" data-suffix="+">0</div><div class="label">Program Kerja</div></div>
+        <div><div class="value" data-count="5000" data-suffix="+">0</div><div class="label">Mahasiswa Terlayani</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== KEMENKO PREVIEW ===== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Struktur Koordinasi</span>
+        <h2>Empat Kemenko,<br>Dua Belas Kementerian</h2>
+        <p>Setiap kemenko dipimpin oleh Menko dan Wakil Menko yang membawahi tiga kementerian dengan fokus kerja masing-masing.</p>
+      </div>
+      <div id="home-kemenko"></div>
+      <div style="text-align:center;margin-top:2.4rem">
+        <a href="struktur.html" class="btn btn-red">Lihat Struktur Lengkap
+          <svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GALERI PREVIEW ===== -->
+  <section class="section white">
+    <div class="container">
+      <div class="section-head center">
+        <span class="eyebrow">Dokumentasi</span>
+        <h2>Galeri Kegiatan</h2>
+        <p>Kilas balik momen berharga dari berbagai kegiatan yang telah dilaksanakan oleh BEM KEMA.</p>
+      </div>
+      <div class="gallery-masonry">
+        <div class="g-item tall reveal"><div class="img-ph dark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-4.5-4.5L7 20"/></svg></div><span class="tag">Internal</span><div class="cap">Foto bersama Kabinet Aksarakestra</div></div>
+        <div class="g-item reveal"><div class="img-ph warm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-4.5-4.5L7 20"/></svg></div><span class="tag">Aksi Sosial</span><div class="cap">Kegiatan pengabdian masyarakat</div></div>
+        <div class="g-item reveal"><div class="img-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-4.5-4.5L7 20"/></svg></div><span class="tag">Seminar</span><div class="cap">Diskusi kajian strategis</div></div>
+        <div class="g-item wide reveal"><div class="img-ph red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-4.5-4.5L7 20"/></svg></div><span class="tag">Kabinet</span><div class="cap">Foto bersama seluruh pengurus di depan kampus</div></div>
+      </div>
+      <div style="text-align:center;margin-top:2.6rem">
+        <a href="galeri.html" class="btn btn-red">Lihat Semua Galeri
+          <svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="cta-band reveal">
+        <div>
+          <h2>Punya Aspirasi untuk Kampus?</h2>
+          <p>Setiap suara mahasiswa penting. Sampaikan aspirasimu dan kami akan mengawalnya sampai tuntas.</p>
+        </div>
+        <a href="kontak.html" class="btn btn-light">Sampaikan Sekarang
+          <svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div id="site-footer"></div>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

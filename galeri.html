@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galeri | BEM KEMA TUS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <div id="site-header"></div>
+
+  <div class="page-hero center">
+    <div class="ghost" aria-hidden="true">Galeri</div>
+    <div class="container">
+      <span class="eyebrow on-dark" style="justify-content:center">Dokumentasi</span>
+      <h1>Galeri Kegiatan</h1>
+      <p>Kilas balik momen berharga dari berbagai kegiatan yang telah dilaksanakan oleh BEM KEMA. Klik foto untuk memperbesar.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="toolbar" style="justify-content:center">
+        <div class="chip-row" id="galeri-filter">
+          <button class="chip active" data-kategori="semua">Semua</button>
+          <button class="chip" data-kategori="rapat-kerja">Rapat Kerja</button>
+          <button class="chip" data-kategori="seminar">Seminar</button>
+          <button class="chip" data-kategori="aksi-sosial">Aksi Sosial</button>
+          <button class="chip" data-kategori="penristek">Penristek</button>
+        </div>
+      </div>
+      <div class="gallery-masonry" id="galeri-grid"></div>
+    </div>
+  </section>
+
+  <div id="site-footer"></div>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

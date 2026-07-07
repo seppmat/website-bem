@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Struktur Organisasi | BEM KEMA TUS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <div id="site-header"></div>
+
+  <div class="page-hero center">
+    <div class="ghost" aria-hidden="true">Struktur</div>
+    <div class="container">
+      <span class="eyebrow on-dark" style="justify-content:center">Kabinet Aksarakestra</span>
+      <h1>Struktur Organisasi</h1>
+      <p>Sinergi kepemimpinan progresif mahasiswa Telkom University Surabaya dalam mewujudkan ekosistem kampus yang inovatif dan kontributif.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+
+      <!-- Pimpinan -->
+      <div class="leaders">
+        <div class="leader-card reveal">
+          <!-- Ganti dengan <img src="assets/img/presiden.jpg"> -->
+          <div class="img-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-4.5-4.5L7 20"/></svg></div>
+          <div>
+            <div class="role">Presiden Mahasiswa</div>
+            <div class="name">Awra Sank Rama</div>
+          </div>
+        </div>
+        <div class="leader-card reveal">
+          <div class="img-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-4.5-4.5L7 20"/></svg></div>
+          <div>
+            <div class="role">Wakil Presiden</div>
+            <div class="name">Mas Adekanz</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="org-line"></div>
+
+      <!-- Sekretaris & Bendahara (dirender dari data.js) -->
+      <div class="section-head center" style="margin-bottom:1.6rem">
+        <span class="eyebrow">Badan Pengurus Harian</span>
+      </div>
+      <div class="staff-row" id="struktur-staff"></div>
+
+      <div class="org-line"></div>
+
+      <!-- Kemenko + kementerian di bawahnya (dirender dari data.js) -->
+      <div class="section-head" style="margin-bottom:2rem">
+        <span class="eyebrow">Kementerian Koordinator</span>
+        <h2>Empat Kemenko</h2>
+        <p>Setiap kemenko dipimpin Menko dan Wakil Menko, serta membawahi tiga kementerian. Klik kementerian untuk melihat profilnya.</p>
+      </div>
+      <div id="struktur-kemenko"></div>
+
+    </div>
+  </section>
+
+  <div id="site-footer"></div>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
