@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lacak Status Aspirasi | BEM KEMA TUS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <div id="site-header"></div>
+
+  <div class="page-hero center">
+    <div class="ghost" aria-hidden="true">Tracking</div>
+    <div class="container">
+      <span class="eyebrow on-dark" style="justify-content:center">Transparansi Advokasi</span>
+      <h1>Lacak Aspirasi Mahasiswa</h1>
+      <p>Pantau perkembangan dan tindak lanjut laporan, aspirasi, atau aduanmu secara transparan dan berkala.</p>
+    </div>
+  </div>
+
+  <!-- Animated Marquee Banner -->
+  <div class="marquee" aria-hidden="true" style="margin-top:0;transform:none;border-inline:none;position:relative;z-index:2">
+    <div class="marquee-track">
+      <span>#Satu Aksara, Bersama BerSatu <em>&#9679;</em> Pengawalan Transparan &amp; Responsif <em>&#9679;</em> Setiap Suara Mahasiswa Berharga <em>&#9679;</em> BEM KEMA TUS 2026 <em>&#9679;</em></span>
+      <span>#Satu Aksara, Bersama BerSatu <em>&#9679;</em> Pengawalan Transparan &amp; Responsif <em>&#9679;</em> Setiap Suara Mahasiswa Berharga <em>&#9679;</em> BEM KEMA TUS 2026 <em>&#9679;</em></span>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container" style="max-width:880px">
+
+      <!-- HERO SEARCH BOX LACAK -->
+      <div class="tracking-standalone-hero reveal">
+        <div class="tsh-badge">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="M11 8v6"/><path d="M8 11h6"/></svg>
+          Sistem Pelacakan Tiket Resmi
+        </div>
+        <h2>Masukkan ID Tiket Aspirasimu</h2>
+        <p>Kode tiket didapatkan sesaat setelah kamu mengirimkan aspirasi di halaman Hubungi Kami.</p>
+
+        <form class="tracking-search-bar" id="tracking-form" onsubmit="trackAspirasi(event)">
+          <div class="tsb-input-wrapper">
+            <svg class="tsb-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="text" id="track-id-input" placeholder="Masukkan ID Tiket (Contoh: ASP-2026-001)" autocomplete="off" required>
+          </div>
+          <button type="submit" class="btn btn-red tsb-btn">
+            <span>Cari Tiket</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </form>
+
+        <div class="tracking-demo-pills">
+          <span class="tdp-label">Uji Coba Tiket Demo:</span>
+          <button type="button" class="tdp-pill" onclick="fillTrackingInput('ASP-2026-001')">
+            <span class="tdp-dot dot-selesai"></span> ASP-2026-001 (Selesai)
+          </button>
+          <button type="button" class="tdp-pill" onclick="fillTrackingInput('ASP-2026-002')">
+            <span class="tdp-dot dot-proses"></span> ASP-2026-002 (Diproses)
+          </button>
+          <button type="button" class="tdp-pill" onclick="fillTrackingInput('ASP-2026-003')">
+            <span class="tdp-dot dot-terima"></span> ASP-2026-003 (Diterima)
+          </button>
+        </div>
+      </div>
+
+      <!-- TEMPAT HASIL TRACKING -->
+      <div id="tracking-result-box" class="tracking-result-box" style="display:none;margin-top:2.5rem">
+        <!-- Dirender melalui JS -->
+      </div>
+
+      <!-- CALLOUT AJAKAN ASPIRASI BARU -->
+      <div class="tracking-cta-box reveal" style="margin-top:3.5rem">
+        <div>
+          <h3>Belum Mengajukan Aspirasi?</h3>
+          <p>Sampaikan gagasan, keluhan fasilitas, maupun permohonan advokasi secara bebas dan terlindungi.</p>
+        </div>
+        <a href="kontak.html" class="btn btn-red">
+          Kirim Aspirasi Sekarang
+          <svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <div id="site-footer"></div>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

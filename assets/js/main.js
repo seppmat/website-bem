@@ -24,7 +24,8 @@ const NAV_ITEMS = [
   { href: "struktur.html", label: "Struktur" },
   { href: "kementerian.html", label: "Kementerian" },
   { href: "kegiatan.html", label: "Kegiatan" },
-  { href: "galeri.html", label: "Galeri" }
+  { href: "galeri.html", label: "Galeri" },
+  { href: "lacak-aspirasi.html", label: "Lacak Aspirasi" }
 ];
 
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -923,32 +924,41 @@ function initKontak() {
     const randomNum = Math.floor(100 + Math.random() * 900);
     const newTicketId = `ASP-2026-${randomNum}`;
     
-    btn.textContent = `Aspirasi Terkirim! Tiket: ${newTicketId}`;
+    btn.innerHTML = `<span>Aspirasi Terkirim! Tiket: ${newTicketId}</span>`;
     btn.disabled = true;
     btn.style.background = "#1E7A46";
 
-    // Auto add ke database lokal agar bisa langsung dilacak
+    // Simpan ke dummy data lokal
     const cfJudul = document.getElementById("cf-judul");
     const cfKat = document.getElementById("cf-kategori");
     const cfKem = document.getElementById("cf-kementerian");
+    const cfNama = document.getElementById("cf-nama");
+    const senderName = cfNama && cfNama.value.trim() ? cfNama.value.trim() : "Anonim";
+
     DUMMY_ASPIRASI[newTicketId] = {
-      judul: cfJudul ? cfJudul.value : "Aspirasi Mahasiswa",
-      kategori: cfKat ? cfKat.options[cfKat.selectedIndex].text : "Aspirasi Umum",
-      kementerian: cfKem ? cfKem.options[cfKem.selectedIndex].text : "BEM KEMA Terpadu",
+      judul: cfJudul && cfJudul.value ? cfJudul.value : "Aspirasi Mahasiswa",
+      kategori: cfKat && cfKat.selectedIndex >= 0 ? cfKat.options[cfKat.selectedIndex].text : "Aspirasi Mahasiswa",
+      kementerian: cfKem && cfKem.selectedIndex >= 0 ? cfKem.options[cfKem.selectedIndex].text : "BEM KEMA Terpadu",
       tanggal: "Hari ini",
       status: "diterima",
       statusText: "Aspirasi Diterima",
       statusStep: 1,
-      catatan: "Aspirasimu telah berhasil masuk ke sistem dan sedang menunggu peninjauan tim advokasi."
+      catatan: `Aspirasi telah berhasil masuk dari ${senderName} dan sedang dalam antrean telaah advokasi BEM KEMA TUS.`
     };
 
+    // Tampilkan notifikasi popup / banner konfirmasi dengan tautan ke halaman lacak
     setTimeout(() => {
-      btn.textContent = "Kirimkan Aspirasi Sekarang";
+      btn.innerHTML = `<span>Kirimkan Aspirasi Sekarang</span><svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`;
       btn.disabled = false;
       btn.style.background = "";
       form.reset();
-      fillTrackingInput(newTicketId);
-    }, 3200);
+
+      // Redirect atau beri opsi lacak langsung
+      if (confirm(`Aspirasimu berhasil terkirim dengan ID Tiket: ${newTicketId}\n\nIngin membuka halaman Lacak Aspirasi sekarang?`)) {
+        sessionStorage.setItem("last_track_id", newTicketId);
+        window.location.href = "lacak-aspirasi.html";
+      }
+    }, 1800);
   });
 }
 
@@ -1097,6 +1107,14 @@ function toggleProker(idx) {
   item.classList.toggle('proker-open', !isOpen);
 }
 
+function initLacakAspirasi() {
+  const autoId = sessionStorage.getItem("last_track_id");
+  if (autoId) {
+    sessionStorage.removeItem("last_track_id");
+    fillTrackingInput(autoId);
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   renderChrome();
   initHome();
@@ -1105,6 +1123,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initKementerian();
   initStruktur();
   initKontak();
+  initLacakAspirasi();
   initReveal();
   initCounters();
   initTilt();
