@@ -1343,7 +1343,243 @@ h3,h4{font-weight:800;letter-spacing:-.01em;line-height:1.25}
   color: var(--muted);
 }
 
-/* ---------- Aspirasi Portal & Mode Tabs ---------- */
+/* ---------- Tracking Aspirasi Box ---------- */
+.tracking-aspirasi-box {
+  background: var(--paper);
+  border: 1.5px solid var(--line-soft);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  position: relative;
+}
+.tracking-top {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  margin-bottom: 1.1rem;
+}
+.tracking-title {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  font-family: var(--display);
+  font-size: 1.25rem;
+  letter-spacing: .02em;
+  color: var(--ink);
+}
+.tracking-title svg {
+  color: var(--red);
+}
+.tracking-sub {
+  font-size: .82rem;
+  color: var(--muted);
+}
+.tracking-form {
+  display: flex;
+  flex-direction: column;
+  gap: .65rem;
+}
+.tracking-input-group {
+  display: flex;
+  gap: .6rem;
+}
+.tracking-input-group input {
+  flex: 1;
+  padding: .75rem 1.1rem;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  font: inherit;
+  font-size: .9rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  transition: .2s;
+}
+.tracking-input-group input:focus {
+  outline: none;
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(200,16,46,.12);
+}
+.tracking-btn {
+  padding: .75rem 1.4rem;
+  border-radius: 12px;
+  font-size: .88rem;
+  flex-shrink: 0;
+}
+.tracking-hints {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  flex-wrap: wrap;
+  font-size: .75rem;
+  color: var(--muted);
+}
+.hint-tag {
+  background: #fff;
+  border: 1px solid var(--line-soft);
+  padding: .2rem .55rem;
+  border-radius: 6px;
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--red);
+  cursor: pointer;
+  transition: all .18s;
+}
+.hint-tag:hover {
+  background: var(--red);
+  color: #fff;
+  border-color: var(--red);
+}
+
+.tracking-result-box {
+  margin-top: 1.2rem;
+  animation: fadeIn .25s ease;
+}
+.tracking-not-found {
+  display: flex;
+  align-items: flex-start;
+  gap: .8rem;
+  background: rgba(229,35,63,.1);
+  border: 1px solid rgba(229,35,63,.3);
+  color: var(--red-deep);
+  padding: 1rem 1.2rem;
+  border-radius: 12px;
+  font-size: .85rem;
+  line-height: 1.5;
+}
+.tracking-found-card {
+  background: #fff;
+  border: 1px solid var(--line-soft);
+  border-radius: 14px;
+  padding: 1.4rem;
+  box-shadow: var(--shadow-sm);
+}
+.tfc-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.4rem;
+  border-bottom: 1px dashed var(--line);
+  padding-bottom: 1rem;
+}
+.tfc-id {
+  font-family: var(--display);
+  font-size: 1.1rem;
+  color: var(--red);
+  letter-spacing: .05em;
+}
+.tfc-title {
+  font-size: 1.05rem;
+  margin: .2rem 0 .3rem;
+}
+.tfc-meta {
+  font-size: .78rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+.tfc-status-badge {
+  font-size: .72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  padding: .35rem .75rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.tfc-status-badge.selesai { background: rgba(30,122,70,.12); color: #1E7A46; }
+.tfc-status-badge.proses { background: rgba(242,163,60,.18); color: #B25E00; }
+.tfc-status-badge.diterima { background: rgba(46,58,140,.12); color: #2E3A8C; }
+
+/* 3-Step Stepper Progress */
+.tracking-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  margin: 1.4rem 0 1.2rem;
+  padding: 0 1rem;
+}
+.t-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .4rem;
+  z-index: 2;
+}
+.t-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 2px solid var(--line);
+  display: grid;
+  place-items: center;
+  font-family: var(--display);
+  font-size: .9rem;
+  color: var(--muted);
+  transition: all .25s;
+}
+.t-label {
+  font-size: .75rem;
+  font-weight: 800;
+  color: var(--muted);
+}
+.t-step.active .t-dot {
+  background: var(--red);
+  border-color: var(--red);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(200,16,46,.32);
+}
+.t-step.active .t-label {
+  color: var(--red);
+}
+.t-line {
+  flex: 1;
+  height: 3px;
+  background: var(--line);
+  margin: 0 .4rem 1.4rem;
+  position: relative;
+  z-index: 1;
+  transition: background .25s;
+}
+.t-line.active {
+  background: var(--red);
+}
+.tfc-notes {
+  background: var(--paper);
+  border-radius: 10px;
+  padding: .85rem 1rem;
+  margin-top: .8rem;
+}
+.tfc-notes-label {
+  display: block;
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: .2rem;
+}
+.tfc-notes p {
+  font-size: .84rem;
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+@media(max-width:560px) {
+  .tracking-input-group {
+    flex-direction: column;
+  }
+  .tfc-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .tracking-stepper {
+    padding: 0;
+  }
+}
 .aspirasi-card {
   background: var(--card);
   border-radius: var(--radius-lg);

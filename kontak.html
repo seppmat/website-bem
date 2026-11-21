@@ -75,9 +75,41 @@
 
       <!-- PORTAL ASPIRASI & KONTAK TERPADU -->
       <div class="aspirasi-card reveal">
+
+        <!-- SECTION TRACKING ASPIRASI MAHASISWA -->
+        <div class="tracking-aspirasi-box">
+          <div class="tracking-top">
+            <div class="tracking-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="M11 8v6"/><path d="M8 11h6"/></svg>
+              <span>Lacak Status Aspirasi</span>
+            </div>
+            <span class="tracking-sub">Masukkan ID Tiket untuk memantau progres aduanmu</span>
+          </div>
+
+          <form class="tracking-form" id="tracking-form" onsubmit="trackAspirasi(event)">
+            <div class="tracking-input-group">
+              <input type="text" id="track-id-input" placeholder="Contoh: ASP-2026-001" autocomplete="off" required>
+              <button type="submit" class="btn btn-red tracking-btn">
+                <span>Lacak</span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </button>
+            </div>
+            <div class="tracking-hints">
+              <span>Coba tiket demo:</span>
+              <button type="button" class="hint-tag" onclick="fillTrackingInput('ASP-2026-001')">ASP-2026-001 (Selesai)</button>
+              <button type="button" class="hint-tag" onclick="fillTrackingInput('ASP-2026-002')">ASP-2026-002 (Diproses)</button>
+            </div>
+          </form>
+
+          <!-- Hasil Tracking Modal / Container -->
+          <div id="tracking-result-box" class="tracking-result-box" style="display:none">
+            <!-- Diisi via JavaScript -->
+          </div>
+        </div>
+
         <div class="aspirasi-header">
           <span class="eyebrow" style="margin-bottom:.2rem">Layanan Mahasiswa</span>
-          <h3>Kanal Aspirasi &amp; Aduan</h3>
+          <h3>Kanal Aspirasi &amp; Aduan Baru</h3>
           <p style="font-size:.86rem;color:var(--muted);margin-top:.2rem">Pilih jenis pengiriman (Terbuka atau Anonim) sesuai kenyamananmu.</p>
         </div>
 

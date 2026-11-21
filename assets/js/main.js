@@ -920,19 +920,146 @@ function initKontak() {
   form.addEventListener("submit", e => {
     e.preventDefault();
     const btn = form.querySelector("button[type=submit]");
-    btn.textContent = "Pesan terkirim \u2713";
+    const randomNum = Math.floor(100 + Math.random() * 900);
+    const newTicketId = `ASP-2026-${randomNum}`;
+    
+    btn.textContent = `Aspirasi Terkirim! Tiket: ${newTicketId}`;
     btn.disabled = true;
     btn.style.background = "#1E7A46";
+
+    // Auto add ke database lokal agar bisa langsung dilacak
+    const cfJudul = document.getElementById("cf-judul");
+    const cfKat = document.getElementById("cf-kategori");
+    const cfKem = document.getElementById("cf-kementerian");
+    DUMMY_ASPIRASI[newTicketId] = {
+      judul: cfJudul ? cfJudul.value : "Aspirasi Mahasiswa",
+      kategori: cfKat ? cfKat.options[cfKat.selectedIndex].text : "Aspirasi Umum",
+      kementerian: cfKem ? cfKem.options[cfKem.selectedIndex].text : "BEM KEMA Terpadu",
+      tanggal: "Hari ini",
+      status: "diterima",
+      statusText: "Aspirasi Diterima",
+      statusStep: 1,
+      catatan: "Aspirasimu telah berhasil masuk ke sistem dan sedang menunggu peninjauan tim advokasi."
+    };
+
     setTimeout(() => {
-      btn.textContent = "Kirim Pesan";
+      btn.textContent = "Kirimkan Aspirasi Sekarang";
       btn.disabled = false;
       btn.style.background = "";
       form.reset();
-    }, 2600);
+      fillTrackingInput(newTicketId);
+    }, 3200);
   });
 }
 
 /* ---------- Mode Aspirasi Terbuka vs Anonim ---------- */
+const DUMMY_ASPIRASI = {
+  "ASP-2026-001": {
+    judul: "Pengajuan Keringanan UKT Semester Genap",
+    kategori: "Advokasi UKT & Keringanan Biaya",
+    kementerian: "Kementerian Adkesma",
+    tanggal: "14 Okt 2026",
+    status: "selesai",
+    statusText: "Selesai Ditindaklanjuti",
+    statusStep: 3, // 1: Diterima, 2: Diproses, 3: Selesai
+    catatan: "Audiensi dengan bagian Keuangan Kampus telah selesai. Daftar penerima potongan telah dikirimkan ke email terdaftar."
+  },
+  "ASP-2026-002": {
+    judul: "Keluhan Ketersediaan Stopkontak di Student Center",
+    kategori: "Fasilitas & Sarana Kampus",
+    kementerian: "Kementerian Dalam Negeri",
+    tanggal: "28 Okt 2026",
+    status: "proses",
+    statusText: "Sedang Diproses",
+    statusStep: 2,
+    catatan: "Surat permohonan penambahan stopkontak telah diserahkan ke bagian Sarpras dan sedang dalam proses pengadaan."
+  },
+  "ASP-2026-003": {
+    judul: "Usulan Pengadaan Kompetisi E-Sport Antar Fakultas",
+    kategori: "Kemahasiswaan & Ormawa",
+    kementerian: "Kementerian PORA",
+    tanggal: "02 Nov 2026",
+    status: "diterima",
+    statusText: "Aspirasi Diterima",
+    statusStep: 1,
+    catatan: "Aspirasi telah masuk ke database Kementerian PORA dan akan dibahas pada rapat kerja bulanan berikutnya."
+  }
+};
+
+function fillTrackingInput(id) {
+  const input = document.getElementById("track-id-input");
+  if (input) {
+    input.value = id;
+    const form = document.getElementById("tracking-form");
+    if (form) trackAspirasi(new Event("submit"));
+  }
+}
+
+function trackAspirasi(e) {
+  if (e && e.preventDefault) e.preventDefault();
+  const input = document.getElementById("track-id-input");
+  const resultBox = document.getElementById("tracking-result-box");
+  if (!input || !resultBox) return;
+
+  const code = input.value.trim().toUpperCase();
+  const data = DUMMY_ASPIRASI[code];
+
+  if (!data) {
+    resultBox.style.display = "block";
+    resultBox.innerHTML = `
+      <div class="tracking-not-found">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div>
+          <strong>Tiket ${code} Tidak Ditemukan</strong>
+          <p>Mohon periksa kembali kode tiket aspirasimu atau gunakan contoh tiket demo di atas.</p>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  const step1Cls = data.statusStep >= 1 ? "active" : "";
+  const step2Cls = data.statusStep >= 2 ? "active" : "";
+  const step3Cls = data.statusStep >= 3 ? "active" : "";
+
+  resultBox.style.display = "block";
+  resultBox.innerHTML = `
+    <div class="tracking-found-card">
+      <div class="tfc-head">
+        <div>
+          <span class="tfc-id">${code}</span>
+          <h4 class="tfc-title">${data.judul}</h4>
+          <span class="tfc-meta">${data.kategori} &bull; ${data.kementerian} &bull; ${data.tanggal}</span>
+        </div>
+        <span class="tfc-status-badge ${data.status}">${data.statusText}</span>
+      </div>
+
+      <!-- Stepper Progress 3 Tahap -->
+      <div class="tracking-stepper">
+        <div class="t-step ${step1Cls}">
+          <div class="t-dot"><span class="t-num">1</span></div>
+          <span class="t-label">Diterima</span>
+        </div>
+        <div class="t-line ${data.statusStep >= 2 ? 'active' : ''}"></div>
+        <div class="t-step ${step2Cls}">
+          <div class="t-dot"><span class="t-num">2</span></div>
+          <span class="t-label">Diproses</span>
+        </div>
+        <div class="t-line ${data.statusStep >= 3 ? 'active' : ''}"></div>
+        <div class="t-step ${step3Cls}">
+          <div class="t-dot"><span class="t-num">3</span></div>
+          <span class="t-label">Selesai</span>
+        </div>
+      </div>
+
+      <div class="tfc-notes">
+        <span class="tfc-notes-label">Progres &amp; Tindak Lanjut:</span>
+        <p>${data.catatan}</p>
+      </div>
+    </div>
+  `;
+}
+
 function setAspirasiMode(mode) {
   const btnTerbuka = document.getElementById("btn-mode-terbuka");
   const btnAnonim = document.getElementById("btn-mode-anonim");
