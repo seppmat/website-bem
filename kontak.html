@@ -44,11 +44,10 @@
             <p>Identitas bersifat opsional. Kamu dapat mengirimkannya secara <strong>anonim</strong> atau mencantumkan nama/email jika ingin dihubungi kembali.</p>
           </div>
           <div class="as-hero-right">
-            <a href="lacak-aspirasi.html" class="btn btn-ghost-dark as-track-link">
+            <button type="button" class="btn btn-ghost-dark as-track-link" onclick="openTrackingModal()">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="M11 8v6"/><path d="M8 11h6"/></svg>
               <span>Lacak Status Aspirasi</span>
-              <svg class="arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </a>
+            </button>
           </div>
         </div>
 
@@ -116,38 +115,39 @@
             <div class="form-row-2">
               <div class="field-item">
                 <label for="cf-kategori">Kategori Isu / Permasalahan <span class="req-star">*</span></label>
-                <div class="select-with-ic">
-                  <select id="cf-kategori" required>
-                    <option value="" disabled selected>Pilih Kategori Aspirasi...</option>
-                    <option value="advokasi-ukt">Advokasi UKT &amp; Keringanan Biaya Kuliah</option>
-                    <option value="fasilitas">Fasilitas, Sarana, &amp; Prasarana Kampus</option>
-                    <option value="akademik">Kebijakan Akademik, Kurikulum, &amp; Dosen</option>
-                    <option value="ormawa">Kemahasiswaan, Komunitas, &amp; Ormawa</option>
-                    <option value="ide-proker">Gagasan &amp; Inovasi Program Kerja BEM</option>
-                    <option value="keamanan-lingkungan">Lingkungan, Kebersihan, &amp; Keamanan Kampus</option>
-                    <option value="lainnya">Lainnya / Kolaborasi</option>
-                  </select>
+                <input type="hidden" id="cf-kategori" name="kategori" value="" required>
+                
+                <!-- Custom Dropdown Kategori -->
+                <div class="custom-select-wrapper" id="contact-kategori-wrapper" style="max-width:100%">
+                  <button type="button" class="custom-select-btn form-custom-btn" id="contact-kategori-trigger" aria-haspopup="listbox" aria-expanded="false">
+                    <span class="cs-label">
+                      <span class="cs-dot"></span>
+                      <span class="cs-text" id="contact-kategori-text">Pilih Kategori Aspirasi...</span>
+                    </span>
+                    <svg class="cs-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </button>
+                  <div class="custom-select-menu" id="contact-kategori-menu" role="listbox">
+                    <!-- Diisi via JavaScript -->
+                  </div>
                 </div>
               </div>
 
               <div class="field-item">
                 <label for="cf-kementerian">Tujuan Kementerian Penanggung Jawab <span class="req-star">*</span></label>
-                <div class="select-with-ic">
-                  <select id="cf-kementerian" required>
-                    <option value="semua">BEM KEMA Terpadu (Presidium &amp; Kemenko)</option>
-                    <option value="adkesma">Kementerian Advokasi &amp; Kesejahteraan Mahasiswa (Adkesma)</option>
-                    <option value="polkastrat">Kementerian Politik &amp; Kajian Strategis (Polkastrat)</option>
-                    <option value="sosling">Kementerian Sosial &amp; Lingkungan Hidup (Sosling)</option>
-                    <option value="penristek">Kementerian Pendidikan, Riset, &amp; Teknologi (Penristek)</option>
-                    <option value="komdigi">Kementerian Komunikasi &amp; Digital (Komdigi)</option>
-                    <option value="dalam-negeri">Kementerian Dalam Negeri (Hubungan Ormawa)</option>
-                    <option value="luar-negeri">Kementerian Luar Negeri (Jejaring Eksternal)</option>
-                    <option value="psdm">Kementerian Pengembangan Sumber Daya Mahasiswa (PSDM)</option>
-                    <option value="ekraf">Kementerian Ekonomi &amp; Kreatif (Ekraf)</option>
-                    <option value="pora">Kementerian Pemuda &amp; Olahraga (PORA)</option>
-                    <option value="senbud">Kementerian Seni &amp; Budaya (Senbud)</option>
-                    <option value="agama">Kementerian Agama (Kerohanian &amp; Toleransi)</option>
-                  </select>
+                <input type="hidden" id="cf-kementerian" name="kementerian" value="semua" required>
+
+                <!-- Custom Dropdown Kementerian -->
+                <div class="custom-select-wrapper" id="contact-kementerian-wrapper" style="max-width:100%">
+                  <button type="button" class="custom-select-btn form-custom-btn" id="contact-kementerian-trigger" aria-haspopup="listbox" aria-expanded="false">
+                    <span class="cs-label">
+                      <span class="cs-dot"></span>
+                      <span class="cs-text" id="contact-kementerian-text">BEM KEMA Terpadu (Presidium &amp; Kemenko)</span>
+                    </span>
+                    <svg class="cs-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </button>
+                  <div class="custom-select-menu" id="contact-kementerian-menu" role="listbox">
+                    <!-- Diisi via JavaScript -->
+                  </div>
                 </div>
               </div>
             </div>

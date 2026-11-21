@@ -24,8 +24,7 @@ const NAV_ITEMS = [
   { href: "struktur.html", label: "Struktur" },
   { href: "kementerian.html", label: "Kementerian" },
   { href: "kegiatan.html", label: "Kegiatan" },
-  { href: "galeri.html", label: "Galeri" },
-  { href: "lacak-aspirasi.html", label: "Lacak Aspirasi" }
+  { href: "galeri.html", label: "Galeri" }
 ];
 
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -128,7 +127,59 @@ function renderChrome() {
           </div>
         </div>
       </footer>
-      <button class="to-top" aria-label="Kembali ke atas">${ICONS.up}</button>`;
+      <button class="to-top" aria-label="Kembali ke atas">${ICONS.up}</button>
+
+      <!-- Floating Action Button Lacak Aspirasi (Sudut Kanan Bawah) -->
+      <button type="button" class="floating-track-btn" id="floatingTrackBtn" onclick="openTrackingModal()" aria-label="Lacak Status Aspirasi">
+        <span class="ftb-pulse"></span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="M11 8v6"/><path d="M8 11h6"/></svg>
+        <span class="ftb-text">Lacak Aspirasi</span>
+      </button>
+
+      <!-- Modal Pop-Up Lacak Aspirasi Terpadu -->
+      <div class="tracking-modal-overlay" id="trackingModalOverlay" onclick="closeTrackingModalOnOverlay(event)">
+        <div class="tracking-modal-card">
+          <button type="button" class="tracking-modal-close" onclick="closeTrackingModal()" aria-label="Tutup Popup">&times;</button>
+          
+          <div class="tsh-badge" style="margin-bottom:.6rem">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="M11 8v6"/><path d="M8 11h6"/></svg>
+            Sistem Pelacakan Tiket
+          </div>
+          <h3 style="font-size:1.45rem;margin-bottom:.35rem">Lacak Status Aspirasi</h3>
+          <p style="font-size:.85rem;color:var(--muted);margin-bottom:1.4rem">Masukkan kode tiket aspirasimu untuk memeriksa status tindak lanjut secara real-time.</p>
+
+          <form class="tracking-search-bar" id="tracking-form-modal" onsubmit="trackAspirasiModal(event)">
+            <div class="tsb-input-wrapper">
+              <svg class="tsb-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <input type="text" id="track-id-modal-input" placeholder="Contoh: ASP-2026-001" autocomplete="off" required>
+            </div>
+            <button type="submit" class="btn btn-red tsb-btn" style="padding:.75rem 1.4rem;font-size:.88rem">
+              <span>Lacak</span>
+            </button>
+          </form>
+
+          <div class="tracking-demo-pills" style="margin-top:1rem;justify-content:flex-start">
+            <span class="tdp-label">Demo:</span>
+            <button type="button" class="tdp-pill" onclick="fillTrackingInputModal('ASP-2026-001')">
+              <span class="tdp-dot dot-selesai"></span> Selesai
+            </button>
+            <button type="button" class="tdp-pill" onclick="fillTrackingInputModal('ASP-2026-002')">
+              <span class="tdp-dot dot-proses"></span> Diproses
+            </button>
+            <button type="button" class="tdp-pill" onclick="fillTrackingInputModal('ASP-2026-003')">
+              <span class="tdp-dot dot-terima"></span> Diterima
+            </button>
+          </div>
+
+          <!-- Wadah Hasil Tracking Modal -->
+          <div id="tracking-modal-result" class="tracking-result-box" style="display:none;margin-top:1.4rem"></div>
+
+          <div style="margin-top:1.4rem;padding-top:.85rem;border-top:1px dashed var(--line);display:flex;justify-content:space-between;align-items:center;font-size:.78rem">
+            <span style="color:var(--muted)">Belum mengirim aspirasi?</span>
+            <a href="kontak.html" style="color:var(--red);font-weight:800" onclick="closeTrackingModal()">Kirim Aspirasi &rarr;</a>
+          </div>
+        </div>
+      </div>`;
 
     const toTop = footer.querySelector(".to-top");
     window.addEventListener("scroll", () => {
@@ -304,8 +355,8 @@ function personCard(nama, role) {
     </div>`;
 }
 
-/* ---------- Custom Styled Dropdown (Kementerian) ---------- */
-function initCustomSelect(wrapperId, onSelectChange) {
+/* ---------- Custom Styled Dropdown (Universal) ---------- */
+function initCustomSelect(wrapperId, onSelectChange, customItems) {
   const wrapper = document.getElementById(wrapperId);
   if (!wrapper) return;
   const trigger = wrapper.querySelector(".custom-select-btn");
@@ -313,8 +364,8 @@ function initCustomSelect(wrapperId, onSelectChange) {
   const menu = wrapper.querySelector(".custom-select-menu");
   if (!trigger || !menu) return;
 
-  // Build items
-  const items = [
+  // Build items: gunakan customItems jika ada, atau default ke list kementerian
+  const items = customItems || [
     { id: "semua", nama: "Semua Kementerian", desc: "Tampilkan seluruh agenda" },
     { id: "umum", nama: "Umum / Presidium", desc: "Agenda bersama atau pimpinan" }
   ].concat(KEMENTERIAN.map(k => ({
@@ -324,10 +375,10 @@ function initCustomSelect(wrapperId, onSelectChange) {
   })));
 
   menu.innerHTML = items.map(item => `
-    <div class="custom-select-opt ${item.id === 'semua' ? 'selected' : ''}" data-val="${item.id}" role="option">
+    <div class="custom-select-opt ${item.id === (items[0]?.id) ? 'selected' : ''}" data-val="${item.id}" role="option">
       <div class="opt-left">
         <span class="opt-name">${item.nama}</span>
-        <span class="opt-desc">${item.desc}</span>
+        ${item.desc ? `<span class="opt-desc">${item.desc}</span>` : ''}
       </div>
       <svg class="opt-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
     </div>
@@ -361,7 +412,7 @@ function initCustomSelect(wrapperId, onSelectChange) {
       const found = items.find(it => it.id === val);
       if (textLabel && found) textLabel.textContent = found.nama;
       toggle(false);
-      if (typeof onSelectChange === "function") onSelectChange(val);
+      if (typeof onSelectChange === "function") onSelectChange(val, found);
     });
   });
 
@@ -918,8 +969,44 @@ function initStruktur() {
 function initKontak() {
   const form = document.getElementById("contact-form");
   if (!form) return;
+
+  // Inisialisasi Custom Dropdown Kategori di Form Kontak
+  const kategoriList = [
+    { id: "advokasi-ukt", nama: "Advokasi UKT & Keringanan Biaya Kuliah", desc: "Keringanan cicilan, penundaan, & beasiswa" },
+    { id: "fasilitas", nama: "Fasilitas, Sarana, & Prasarana Kampus", desc: "Lab, ruang kelas, WiFi, & fasilitas fisik" },
+    { id: "akademik", nama: "Kebijakan Akademik & Perkuliahan", desc: "Kurikulum, dosen, KRS, & jadwal kuliah" },
+    { id: "ormawa", nama: "Kemahasiswaan, Komunitas, & Ormawa", desc: "Kegiatan ormawa, UKM, & himpunan" },
+    { id: "ide-proker", nama: "Gagasan & Inovasi Program Kerja BEM", desc: "Saran acara, kolaborasi, & ide terobosan" },
+    { id: "keamanan-lingkungan", nama: "Lingkungan, Kebersihan, & Keamanan", desc: "Parkir, keselamatan kampus, & sanitasi" },
+    { id: "lainnya", nama: "Lainnya / Pertanyaan Umum", desc: "Pertanyaan atau aduan di luar kategori" }
+  ];
+
+  const hiddenKat = document.getElementById("cf-kategori");
+  initCustomSelect("contact-kategori-wrapper", (val, item) => {
+    if (hiddenKat) hiddenKat.value = val;
+  }, kategoriList);
+
+  // Inisialisasi Custom Dropdown Kementerian di Form Kontak
+  const kementerianList = [
+    { id: "semua", nama: "BEM KEMA Terpadu", desc: "Presidium & Koordinasi Kemenko" }
+  ].concat(KEMENTERIAN.map(k => ({
+    id: k.id,
+    nama: `Kementerian ${k.nama}`,
+    desc: k.desc
+  })));
+
+  const hiddenKem = document.getElementById("cf-kementerian");
+  initCustomSelect("contact-kementerian-wrapper", (val, item) => {
+    if (hiddenKem) hiddenKem.value = val;
+  }, kementerianList);
+
   form.addEventListener("submit", e => {
     e.preventDefault();
+    if (hiddenKat && !hiddenKat.value) {
+      alert("Silakan pilih Kategori Aspirasi terlebih dahulu.");
+      return;
+    }
+
     const btn = form.querySelector("button[type=submit]");
     const randomNum = Math.floor(100 + Math.random() * 900);
     const newTicketId = `ASP-2026-${randomNum}`;
@@ -930,15 +1017,16 @@ function initKontak() {
 
     // Simpan ke dummy data lokal
     const cfJudul = document.getElementById("cf-judul");
-    const cfKat = document.getElementById("cf-kategori");
-    const cfKem = document.getElementById("cf-kementerian");
     const cfNama = document.getElementById("cf-nama");
     const senderName = cfNama && cfNama.value.trim() ? cfNama.value.trim() : "Anonim";
+    
+    const katObj = kategoriList.find(k => k.id === (hiddenKat ? hiddenKat.value : ""));
+    const kemObj = kementerianList.find(k => k.id === (hiddenKem ? hiddenKem.value : "semua"));
 
     DUMMY_ASPIRASI[newTicketId] = {
       judul: cfJudul && cfJudul.value ? cfJudul.value : "Aspirasi Mahasiswa",
-      kategori: cfKat && cfKat.selectedIndex >= 0 ? cfKat.options[cfKat.selectedIndex].text : "Aspirasi Mahasiswa",
-      kementerian: cfKem && cfKem.selectedIndex >= 0 ? cfKem.options[cfKem.selectedIndex].text : "BEM KEMA Terpadu",
+      kategori: katObj ? katObj.nama : "Aspirasi Mahasiswa",
+      kementerian: kemObj ? kemObj.nama : "BEM KEMA Terpadu",
       tanggal: "Hari ini",
       status: "diterima",
       statusText: "Aspirasi Diterima",
@@ -953,12 +1041,14 @@ function initKontak() {
       btn.style.background = "";
       form.reset();
 
-      // Redirect atau beri opsi lacak langsung
-      if (confirm(`Aspirasimu berhasil terkirim dengan ID Tiket: ${newTicketId}\n\nIngin membuka halaman Lacak Aspirasi sekarang?`)) {
-        sessionStorage.setItem("last_track_id", newTicketId);
-        window.location.href = "lacak-aspirasi.html";
-      }
-    }, 1800);
+      // Reset text label dropdown
+      const katText = document.getElementById("contact-kategori-text");
+      if (katText) katText.textContent = "Pilih Kategori Aspirasi...";
+      if (hiddenKat) hiddenKat.value = "";
+
+      // Buka modal pop-up lacak langsung dengan tiket yang baru dibuat
+      openTrackingModal(newTicketId);
+    }, 1500);
   });
 }
 
@@ -995,6 +1085,107 @@ const DUMMY_ASPIRASI = {
     catatan: "Aspirasi telah masuk ke database Kementerian PORA dan akan dibahas pada rapat kerja bulanan berikutnya."
   }
 };
+
+function openTrackingModal(presetId) {
+  const modal = document.getElementById("trackingModalOverlay");
+  if (!modal) return;
+  modal.classList.add("show");
+  document.body.style.overflow = "hidden";
+
+  if (presetId) {
+    fillTrackingInputModal(presetId);
+  } else {
+    const input = document.getElementById("track-id-modal-input");
+    if (input) input.focus();
+  }
+}
+
+function closeTrackingModal() {
+  const modal = document.getElementById("trackingModalOverlay");
+  if (!modal) return;
+  modal.classList.remove("show");
+  document.body.style.overflow = "";
+}
+
+function closeTrackingModalOnOverlay(e) {
+  if (e.target.id === "trackingModalOverlay") {
+    closeTrackingModal();
+  }
+}
+
+function fillTrackingInputModal(id) {
+  const input = document.getElementById("track-id-modal-input");
+  if (input) {
+    input.value = id;
+    const form = document.getElementById("tracking-form-modal");
+    if (form) trackAspirasiModal(new Event("submit"));
+  }
+}
+
+function trackAspirasiModal(e) {
+  if (e && e.preventDefault) e.preventDefault();
+  const input = document.getElementById("track-id-modal-input");
+  const resultBox = document.getElementById("tracking-modal-result");
+  if (!input || !resultBox) return;
+
+  const code = input.value.trim().toUpperCase();
+  const data = DUMMY_ASPIRASI[code];
+
+  if (!data) {
+    resultBox.style.display = "block";
+    resultBox.innerHTML = `
+      <div class="tracking-not-found">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div>
+          <strong>Tiket ${code} Tidak Ditemukan</strong>
+          <p>Mohon periksa kembali kode tiket aspirasimu atau gunakan contoh tiket demo di atas.</p>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  const step1Cls = data.statusStep >= 1 ? "active" : "";
+  const step2Cls = data.statusStep >= 2 ? "active" : "";
+  const step3Cls = data.statusStep >= 3 ? "active" : "";
+
+  resultBox.style.display = "block";
+  resultBox.innerHTML = `
+    <div class="tracking-found-card">
+      <div class="tfc-head">
+        <div>
+          <span class="tfc-id">${code}</span>
+          <h4 class="tfc-title">${data.judul}</h4>
+          <span class="tfc-meta">${data.kategori} &bull; ${data.kementerian}</span>
+        </div>
+        <span class="tfc-status-badge ${data.status}">${data.statusText}</span>
+      </div>
+
+      <!-- Stepper Progress 3 Tahap -->
+      <div class="tracking-stepper">
+        <div class="t-step ${step1Cls}">
+          <div class="t-dot"><span class="t-num">1</span></div>
+          <span class="t-label">Diterima</span>
+        </div>
+        <div class="t-line ${data.statusStep >= 2 ? 'active' : ''}"></div>
+        <div class="t-step ${step2Cls}">
+          <div class="t-dot"><span class="t-num">2</span></div>
+          <span class="t-label">Diproses</span>
+        </div>
+        <div class="t-line ${data.statusStep >= 3 ? 'active' : ''}"></div>
+        <div class="t-step ${step3Cls}">
+          <div class="t-dot"><span class="t-num">3</span></div>
+          <span class="t-label">Selesai</span>
+        </div>
+      </div>
+
+      <div class="tfc-notes">
+        <span class="tfc-notes-label">Progres &amp; Catatan:</span>
+        <p>${data.catatan}</p>
+      </div>
+    </div>
+  `;
+}
 
 function fillTrackingInput(id) {
   const input = document.getElementById("track-id-input");

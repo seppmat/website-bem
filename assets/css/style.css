@@ -1599,8 +1599,125 @@ h3,h4{font-weight:800;letter-spacing:-.01em;line-height:1.25}
     padding: 0;
   }
 }
-/* ============================================================
-   HALAMAN ASPIRASI & KONTAK V3 (REDESIGN)
+/* Floating Track Button (Sudut Kanan Bawah) */
+.floating-track-btn {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 180;
+  display: inline-flex;
+  align-items: center;
+  gap: .65rem;
+  background: var(--maroon);
+  color: #fff;
+  padding: .75rem 1.35rem;
+  border-radius: 999px;
+  border: 1.5px solid rgba(255,255,255,.18);
+  box-shadow: 0 12px 32px rgba(32,8,14,.35);
+  font-family: var(--body);
+  font-weight: 800;
+  font-size: .86rem;
+  cursor: pointer;
+  transition: all .28s var(--ease);
+}
+.floating-track-btn:hover {
+  background: var(--red);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 16px 36px rgba(200,16,46,.45);
+  border-color: transparent;
+}
+.floating-track-btn svg {
+  color: #F2C94C;
+}
+.ftb-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #F2C94C;
+  box-shadow: 0 0 0 0 rgba(242,201,76,.7);
+  animation: pulse-sun 2s infinite;
+}
+
+/* Penyesuaian tombol to-top agar tidak bertumpuk */
+.to-top {
+  position: fixed;
+  right: 24px;
+  bottom: 84px;
+  z-index: 175;
+}
+
+/* Modal Pop-up Lacak Aspirasi */
+.tracking-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 350;
+  background: rgba(18,4,8,.75);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s var(--ease);
+}
+.tracking-modal-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+.tracking-modal-card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 2.2rem;
+  max-width: 580px;
+  width: 100%;
+  position: relative;
+  box-shadow: 0 24px 60px rgba(0,0,0,.35);
+  max-height: 90vh;
+  overflow-y: auto;
+  transform: translateY(16px) scale(.98);
+  transition: transform .28s var(--ease);
+}
+.tracking-modal-overlay.show .tracking-modal-card {
+  transform: translateY(0) scale(1);
+}
+.tracking-modal-close {
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 1.5rem;
+  display: grid;
+  place-items: center;
+  line-height: 1;
+  cursor: pointer;
+  transition: all .2s;
+}
+.tracking-modal-close:hover {
+  background: var(--red);
+  color: #fff;
+  transform: rotate(90deg);
+}
+
+@media(max-width:640px) {
+  .floating-track-btn {
+    right: 16px;
+    bottom: 16px;
+    padding: .65rem 1.1rem;
+    font-size: .8rem;
+  }
+  .to-top {
+    right: 16px;
+    bottom: 74px;
+  }
+  .tracking-modal-card {
+    padding: 1.6rem;
+  }
+}
    - Layout Atas ke Bawah (Form Aspirasi Utama duluan)
    - Desain Form Mega Standout dengan Gradasi & Step Badges
    - Kontak & Sekretariat di bawah dalam bentuk 4 Grid Card
@@ -1884,7 +2001,17 @@ h3,h4{font-weight:800;letter-spacing:-.01em;line-height:1.25}
   box-shadow: 0 0 0 3px rgba(200,16,46,.14);
 }
 
-.input-standout, .textarea-standout {
+.form-custom-btn {
+  background: var(--paper) !important;
+  border-radius: 12px !important;
+  padding: .85rem 1.15rem !important;
+  font-size: .92rem !important;
+}
+.form-custom-btn:focus, .form-custom-btn[aria-expanded="true"] {
+  background: #fff !important;
+  border-color: var(--red) !important;
+  box-shadow: 0 0 0 3px rgba(200,16,46,.14) !important;
+}
   width: 100%;
   padding: .9rem 1.15rem;
   border: 1.5px solid var(--line);
