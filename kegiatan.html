@@ -14,30 +14,57 @@
   <div id="site-header"></div>
 
   <div class="page-hero">
-    <div class="ghost" aria-hidden="true">Chronicles</div>
+    <div class="ghost" aria-hidden="true">Aksarakestra</div>
     <div class="container">
-      <span class="eyebrow on-dark">01 / Program &amp; Dokumentasi</span>
-      <h1>Vanguard<br><span class="outline">Chronicles</span></h1>
-      <p>Jelajahi rangkaian agenda strategis dan abadikan momen berharga perjalanan BEM KEMA Telkom University Surabaya.</p>
+      <span class="eyebrow on-dark">Kabinet Aksarakestra</span>
+      <h1>Agenda &amp;<br><span class="outline">Kegiatan</span></h1>
+      <p>Jelajahi seluruh program kerja dan agenda kegiatan BEM KEMA Telkom University Surabaya — #Satu Aksara, Bersama BerSatu.</p>
+    </div>
+  </div>
+
+  <!-- Animated Marquee Banner -->
+  <div class="marquee" aria-hidden="true" style="margin-top:0;transform:none;border-inline:none;position:relative;z-index:2">
+    <div class="marquee-track">
+      <span>#Satu Aksara, Bersama BerSatu <em>&#9679;</em> Agenda Terpadu Kabinet Aksarakestra 2026 <em>&#9679;</em> Garda Terdepan Mahasiswa Berintegritas, Aspiratif, &amp; Informatif <em>&#9679;</em></span>
+      <span>#Satu Aksara, Bersama BerSatu <em>&#9679;</em> Agenda Terpadu Kabinet Aksarakestra 2026 <em>&#9679;</em> Garda Terdepan Mahasiswa Berintegritas, Aspiratif, &amp; Informatif <em>&#9679;</em></span>
     </div>
   </div>
 
   <section class="section">
     <div class="container">
-      <div class="toolbar">
-        <div class="chip-row" id="kegiatan-filter">
-          <button class="chip active" data-kategori="semua">Semua Agenda</button>
-          <button class="chip" data-kategori="seminar">Seminar</button>
-          <button class="chip" data-kategori="sosial">Sosial</button>
-          <button class="chip" data-kategori="internal">Internal</button>
-          <button class="chip" data-kategori="penristek">Penristek</button>
+      <div class="galeri-toolbar" style="margin-bottom:2rem">
+        <div class="galeri-filter-row">
+          <div class="chip-row" id="kegiatan-filter">
+            <button class="chip active" data-kategori="semua">Semua</button>
+            <button class="chip" data-kategori="seminar">Seminar</button>
+            <button class="chip" data-kategori="sosial">Sosial</button>
+            <button class="chip" data-kategori="internal">Internal</button>
+          </div>
+          
+          <div class="filter-controls-group">
+            <!-- Custom Dropdown Kementerian -->
+            <div class="custom-select-wrapper" id="kegiatan-select-wrapper">
+              <button type="button" class="custom-select-btn" id="kegiatan-select-trigger" aria-haspopup="listbox" aria-expanded="false">
+                <span class="cs-label">
+                  <span class="cs-dot"></span>
+                  <span class="cs-text" id="kegiatan-select-text">Semua Kementerian</span>
+                </span>
+                <svg class="cs-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <div class="custom-select-menu" id="kegiatan-select-menu" role="listbox">
+                <!-- Diisi via JavaScript -->
+              </div>
+            </div>
+
+            <!-- Search box -->
+            <label class="search-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+              <input type="search" id="kegiatan-search" placeholder="Cari kegiatan...">
+            </label>
+          </div>
         </div>
-        <label class="search-box">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-          <input type="search" id="kegiatan-search" placeholder="Cari kegiatan...">
-        </label>
       </div>
-      <p id="kegiatan-result" style="font-size:.82rem;font-weight:700;color:var(--muted);margin:-1.4rem 0 1.4rem"></p>
+      <p id="kegiatan-result" style="font-size:.82rem;font-weight:700;color:var(--muted);margin:-0.8rem 0 1.6rem"></p>
       <div class="cards-3" id="kegiatan-grid"></div>
     </div>
   </section>

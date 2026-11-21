@@ -18,19 +18,43 @@
     <div class="container">
       <span class="eyebrow on-dark" style="justify-content:center">Dokumentasi</span>
       <h1>Galeri Kegiatan</h1>
-      <p>Kilas balik momen berharga dari berbagai kegiatan yang telah dilaksanakan oleh BEM KEMA. Klik foto untuk memperbesar.</p>
+      <p>Kilas balik momen berharga dari berbagai kegiatan yang telah dilaksanakan oleh BEM KEMA Telkom University Surabaya — #Satu Aksara, Bersama BerSatu.</p>
+    </div>
+  </div>
+
+  <!-- Animated Marquee Banner -->
+  <div class="marquee" aria-hidden="true" style="margin-top:0;transform:none;border-inline:none;position:relative;z-index:2">
+    <div class="marquee-track">
+      <span>#Satu Aksara, Bersama BerSatu <em>&#9679;</em> Dokumentasi Resmi Kabinet Aksarakestra 2026 <em>&#9679;</em> Dari Mahasiswa, Untuk Almamater &amp; Bangsa <em>&#9679;</em></span>
+      <span>#Satu Aksara, Bersama BerSatu <em>&#9679;</em> Dokumentasi Resmi Kabinet Aksarakestra 2026 <em>&#9679;</em> Dari Mahasiswa, Untuk Almamater &amp; Bangsa <em>&#9679;</em></span>
     </div>
   </div>
 
   <section class="section">
     <div class="container">
-      <div class="toolbar" style="justify-content:center">
-        <div class="chip-row" id="galeri-filter">
-          <button class="chip active" data-kategori="semua">Semua</button>
-          <button class="chip" data-kategori="rapat-kerja">Rapat Kerja</button>
-          <button class="chip" data-kategori="seminar">Seminar</button>
-          <button class="chip" data-kategori="aksi-sosial">Aksi Sosial</button>
-          <button class="chip" data-kategori="penristek">Penristek</button>
+      <div class="galeri-toolbar">
+        <div class="galeri-filter-row">
+          <div class="chip-row" id="galeri-filter">
+            <button class="chip active" data-kategori="semua">Semua</button>
+            <button class="chip" data-kategori="internal">Internal</button>
+            <button class="chip" data-kategori="seminar">Seminar</button>
+            <button class="chip" data-kategori="aksi-sosial">Aksi Sosial</button>
+          </div>
+          <div class="galeri-kem-select">
+            <!-- Custom Dropdown Kementerian -->
+            <div class="custom-select-wrapper" id="galeri-select-wrapper">
+              <button type="button" class="custom-select-btn" id="galeri-select-trigger" aria-haspopup="listbox" aria-expanded="false">
+                <span class="cs-label">
+                  <span class="cs-dot"></span>
+                  <span class="cs-text" id="galeri-select-text">Semua Kementerian</span>
+                </span>
+                <svg class="cs-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <div class="custom-select-menu" id="galeri-select-menu" role="listbox">
+                <!-- Diisi via JavaScript -->
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="gallery-masonry" id="galeri-grid"></div>

@@ -226,7 +226,7 @@ h3,h4{font-weight:800;letter-spacing:-.01em;line-height:1.25}
 
 /* ---------- Marquee ---------- */
 .marquee{
-  background:var(--red);color:#fff;overflow:hidden;padding:.85rem 0;
+  background:#F2C94C;color:var(--maroon);overflow:hidden;padding:.85rem 0;
   transform:rotate(-1.1deg) scale(1.02);border-block:3px solid var(--maroon);
   position:relative;z-index:3;margin-top:-26px;
 }
@@ -282,26 +282,59 @@ h3,h4{font-weight:800;letter-spacing:-.01em;line-height:1.25}
 .misi-item h4{margin-bottom:.25rem;font-size:1.02rem}
 .misi-item p{font-size:.9rem;color:var(--muted)}
 
-/* ---------- Filter chips (sliding pill) ---------- */
+/* ---------- Filter chips (Modern Discrete Pills) ---------- */
 .chip-row{
-  position:relative;display:inline-flex;flex-wrap:wrap;gap:.25rem;
-  background:var(--card);border:1px solid var(--line-soft);
-  padding:.35rem;border-radius:999px;box-shadow:var(--shadow-sm);
+  display:inline-flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:.45rem;
+  background:transparent;
+  padding:0;
+  border:none;
+  box-shadow:none;
 }
 .chip{
-  position:relative;z-index:1;padding:.5rem 1.15rem;border-radius:999px;
-  font-size:.85rem;font-weight:700;color:var(--muted);
-  transition:color .25s var(--ease);white-space:nowrap;
+  display:inline-flex;
+  align-items:center;
+  gap:.4rem;
+  padding:.52rem 1.15rem;
+  border-radius:999px;
+  font-size:.85rem;
+  font-weight:700;
+  color:var(--muted);
+  background:var(--card);
+  border:1.5px solid var(--line-soft);
+  box-shadow:var(--shadow-sm);
+  transition:all .22s var(--ease);
+  cursor:pointer;
+  white-space:nowrap;
+  user-select:none;
 }
-.chip:hover{color:var(--ink)}
-.chip.active{color:#fff}
-.chip-indicator{
-  position:absolute;z-index:0;top:.35rem;bottom:.35rem;border-radius:999px;
-  background:var(--red);box-shadow:0 6px 16px rgba(200,16,46,.35);
-  transition:left .32s var(--ease),width .32s var(--ease);
+.chip:hover{
+  color:var(--ink);
+  border-color:var(--line);
+  transform:translateY(-1px);
+}
+.chip.active{
+  background:var(--red);
+  color:#fff;
+  border-color:var(--red);
+  box-shadow:0 6px 18px rgba(200,16,46,.32);
+  transform:translateY(-1px);
 }
 .chip .count{
-  font-size:.68rem;font-weight:800;opacity:.65;margin-left:.3rem;
+  font-size:.68rem;
+  font-weight:800;
+  opacity:.75;
+  background:rgba(0,0,0,.08);
+  padding:.15rem .45rem;
+  border-radius:999px;
+  line-height:1;
+}
+.chip.active .count{
+  background:rgba(255,255,255,.24);
+  color:#fff;
+  opacity:1;
 }
 
 /* ---------- Kartu kegiatan ---------- */
@@ -691,4 +724,741 @@ h3,h4{font-weight:800;letter-spacing:-.01em;line-height:1.25}
   .reveal,.rise{opacity:1;transform:none;transition:none;animation:none}
   .marquee-track{animation:none}
   *{transition:none!important;animation:none!important}
+}
+
+/* ---------- Proker Detail Accordion ---------- */
+.proker-item {
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+  align-items: stretch;
+}
+.proker-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.proker-header {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1.2rem 1.35rem 1.2rem 0;
+  cursor: pointer;
+  justify-content: space-between;
+}
+.proker-toggle-btn {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(200,16,46,.09);
+  color: var(--red);
+  display: grid;
+  place-items: center;
+  transition: .25s var(--ease);
+}
+.proker-open .proker-toggle-btn {
+  background: var(--red);
+  color: #fff;
+  transform: rotate(180deg);
+}
+.proker-detail {
+  padding: 0 1.35rem 1.35rem 0;
+  border-top: 1px dashed var(--line);
+  margin-top: 0;
+  animation: fadeIn .2s ease;
+}
+@keyframes fadeIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:none; } }
+.proker-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .85rem;
+  margin-top: 1rem;
+}
+@media(max-width:620px){ .proker-meta-grid { grid-template-columns: 1fr; } }
+.proker-meta-item {
+  background: var(--paper);
+  border-radius: 10px;
+  padding: .75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+}
+.proker-meta-full { grid-column: 1 / -1; }
+.proker-meta-label {
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+.proker-meta-value {
+  font-size: .88rem;
+  color: var(--ink);
+  line-height: 1.5;
+}
+.proker-docs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: .75rem;
+}
+.proker-doc-item {
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+}
+.proker-doc-item .img-ph {
+  aspect-ratio: 4/3;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.proker-doc-item span {
+  font-size: .75rem;
+  color: var(--muted);
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ---------- Galeri toolbar responsive ---------- */
+.galeri-toolbar {
+  margin-bottom: 2.4rem;
+}
+.galeri-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  align-items: center;
+  justify-content: space-between;
+}
+.filter-controls-group {
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+  flex-wrap: wrap;
+}
+
+/* Custom Select Dropdown Kementerian */
+.custom-select-wrapper {
+  position: relative;
+  min-width: 230px;
+}
+.custom-select-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .8rem;
+  width: 100%;
+  padding: .68rem 1.15rem;
+  background: var(--card);
+  border: 1.5px solid var(--line-soft);
+  border-radius: 999px;
+  font-size: .86rem;
+  font-weight: 700;
+  color: var(--ink);
+  box-shadow: var(--shadow-sm);
+  transition: .22s var(--ease);
+}
+.custom-select-btn:hover {
+  border-color: var(--red);
+  transform: translateY(-1px);
+}
+.custom-select-btn[aria-expanded="true"] {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(200,16,46,.15);
+}
+.custom-select-btn .cs-label {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.custom-select-btn .cs-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--red);
+}
+.custom-select-btn .cs-chevron {
+  color: var(--muted);
+  transition: transform .25s var(--ease);
+}
+.custom-select-btn[aria-expanded="true"] .cs-chevron {
+  transform: rotate(180deg);
+  color: var(--red);
+}
+
+.custom-select-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  min-width: 270px;
+  max-height: 310px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid var(--line-soft);
+  border-radius: 18px;
+  padding: .5rem;
+  box-shadow: 0 18px 45px rgba(32,8,14,.18);
+  z-index: 150;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px);
+  transition: opacity .22s var(--ease), transform .22s var(--ease);
+}
+.custom-select-menu.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+.custom-select-opt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .65rem .85rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background .18s;
+}
+.custom-select-opt:hover {
+  background: var(--paper);
+}
+.custom-select-opt.selected {
+  background: rgba(200,16,46,.08);
+  color: var(--red);
+}
+.custom-select-opt .opt-left {
+  display: flex;
+  flex-direction: column;
+}
+.custom-select-opt .opt-name {
+  font-weight: 700;
+  font-size: .86rem;
+}
+.custom-select-opt .opt-desc {
+  font-size: .72rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+.custom-select-opt .opt-check {
+  display: none;
+  color: var(--red);
+}
+.custom-select-opt.selected .opt-check {
+  display: block;
+}
+
+/* ---------- Calendar of Events Widget (Interactive) ---------- */
+.calendar-layout {
+  display: grid;
+  grid-template-columns: 1.18fr .82fr;
+  gap: 2rem;
+  background: var(--card);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-sm);
+  margin-top: 1rem;
+}
+@media(max-width:940px){
+  .calendar-layout {
+    grid-template-columns: 1fr;
+    gap: 2.2rem;
+    padding: 1.4rem;
+  }
+}
+.cal-grid-panel {
+  display: flex;
+  flex-direction: column;
+}
+.cal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.4rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--line-soft);
+}
+.cal-month-title h3 {
+  font-family: var(--display);
+  font-size: 1.6rem;
+  letter-spacing: .02em;
+}
+.cal-month-title .year {
+  color: var(--red);
+}
+.cal-badge-count {
+  display: inline-block;
+  font-size: .72rem;
+  font-weight: 800;
+  color: var(--muted);
+  background: var(--paper);
+  padding: .25rem .65rem;
+  border-radius: 999px;
+  margin-top: .2rem;
+}
+.cal-nav-btns {
+  display: flex;
+  gap: .4rem;
+}
+.cal-btn-prev, .cal-btn-next {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--paper);
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  transition: .22s var(--ease);
+}
+.cal-btn-prev:hover, .cal-btn-next:hover {
+  background: var(--red);
+  color: #fff;
+  transform: translateY(-2px);
+}
+.cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: .6rem;
+}
+.cal-days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: .45rem;
+}
+.cal-day {
+  aspect-ratio: 1/1;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper);
+  font-weight: 700;
+  font-size: .88rem;
+  position: relative;
+  transition: .2s var(--ease);
+  border: 1.5px solid transparent;
+}
+.cal-day.empty {
+  background: transparent;
+  pointer-events: none;
+}
+.cal-day:not(.empty):hover {
+  background: #fff;
+  border-color: var(--red);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,.08);
+}
+.cal-day.has-event {
+  font-weight: 800;
+  background: #fff;
+  border-color: var(--line);
+}
+/* Event yang membentang beberapa hari / sebulan penuh */
+.cal-day.in-range {
+  background: rgba(242,163,60,.14);
+  color: var(--maroon);
+  border-radius: 4px;
+  border-color: transparent;
+}
+.cal-day.in-range.range-start {
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  background: rgba(242,163,60,.25);
+  border-left: 2px solid var(--sun);
+}
+.cal-day.in-range.range-end {
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+  background: rgba(242,163,60,.25);
+  border-right: 2px solid var(--sun);
+}
+.cal-day.selected {
+  background: var(--red) !important;
+  color: #fff !important;
+  border-color: var(--red) !important;
+  border-radius: 12px !important;
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(200,16,46,.38);
+  z-index: 2;
+}
+
+/* Period Banner di atas hari kalender */
+.cal-period-banner {
+  background: linear-gradient(135deg, rgba(242,163,60,.12), rgba(200,16,46,.08));
+  border: 1px solid rgba(242,163,60,.35);
+  border-radius: 12px;
+  padding: .75rem 1rem;
+  margin-bottom: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+}
+.cpb-badge {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #B25E00;
+}
+.cpb-badge .pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--sun);
+  box-shadow: 0 0 0 0 rgba(242,163,60,.7);
+  animation: pulse-sun 2s infinite;
+}
+@keyframes pulse-sun {
+  0% { box-shadow: 0 0 0 0 rgba(242,163,60,.7); }
+  70% { box-shadow: 0 0 0 6px rgba(242,163,60,0); }
+  100% { box-shadow: 0 0 0 0 rgba(242,163,60,0); }
+}
+.cpb-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .8rem;
+  cursor: pointer;
+  padding: .25rem .4rem;
+  border-radius: 6px;
+  transition: background .18s;
+}
+.cpb-item:hover {
+  background: rgba(255,255,255,.6);
+}
+.cpb-title {
+  font-size: .84rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+.cpb-range {
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--muted);
+  background: #fff;
+  padding: .15rem .5rem;
+  border-radius: 999px;
+  border: 1px solid var(--line-soft);
+}
+.cal-range-sample {
+  width: 14px;
+  height: 10px;
+  border-radius: 3px;
+  background: rgba(242,163,60,.35);
+  border: 1px solid var(--sun);
+  display: inline-block;
+}
+.cal-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-top: 2px;
+}
+.cal-dot.open, .cal-dot.upcoming { background: #1E7A46; }
+.cal-dot.ongoing { background: var(--sun); }
+.cal-dot.done { background: var(--muted); }
+.cal-day.selected .cal-dot { background: #fff !important; }
+
+.cal-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  margin-top: 1.4rem;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--line);
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+.cal-legend div {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+}
+
+/* Detail panel agenda di kalender */
+.cal-detail-panel {
+  background: var(--paper);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 380px;
+}
+.cal-detail-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
+  border-bottom: 1px dashed var(--line);
+  padding-bottom: .8rem;
+}
+.selected-date-label {
+  font-family: var(--display);
+  font-size: 1.15rem;
+  color: var(--red);
+}
+.cal-event-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 1.35rem;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  border: 1px solid var(--line-soft);
+}
+.cal-event-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  margin-bottom: .2rem;
+}
+.cal-event-tag {
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--red);
+  background: rgba(200,16,46,.08);
+  padding: .25rem .6rem;
+  border-radius: 6px;
+}
+.cal-event-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  line-height: 1.3;
+  color: var(--ink);
+  margin-top: .2rem;
+}
+.cal-event-desc {
+  font-size: .86rem;
+  color: var(--muted);
+  line-height: 1.55;
+  margin: .4rem 0 .8rem;
+}
+.cal-event-meta-grid {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  font-size: .8rem;
+  font-weight: 700;
+  color: var(--muted);
+  background: var(--paper);
+  padding: .85rem 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+.cal-event-meta-grid div {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+}
+.cal-event-meta-grid svg {
+  color: var(--red);
+  flex-shrink: 0;
+  width: 15px;
+  height: 15px;
+}
+.cal-event-foot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  border-top: 1px dashed var(--line);
+  padding-top: .85rem;
+  margin-top: .2rem;
+}
+.cal-empty-pane {
+  text-align: center;
+  padding: 1.6rem .8rem;
+}
+.cal-empty-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(200,16,46,.08);
+  color: var(--red);
+  display: grid;
+  place-items: center;
+  margin: 0 auto .8rem;
+}
+.cal-empty-icon svg { width: 22px; height: 22px; }
+.cal-empty-pane h4 { font-size: 1.05rem; margin-bottom: .3rem; }
+.cal-empty-pane p { font-size: .82rem; color: var(--muted); line-height: 1.5; }
+.cal-upcoming-list {
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+  margin-top: .8rem;
+  text-align: left;
+}
+.cal-mini-item {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  background: #fff;
+  border-radius: 10px;
+  padding: .6rem .8rem;
+  cursor: pointer;
+  transition: transform .2s var(--ease), border-color .2s;
+  border: 1px solid var(--line-soft);
+}
+.cal-mini-item:hover {
+  transform: translateX(4px);
+  border-color: var(--red);
+}
+.cmi-date {
+  font-family: var(--display);
+  font-size: 1.1rem;
+  color: var(--red);
+  min-width: 28px;
+  text-align: center;
+}
+.cmi-body {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.cmi-title {
+  font-size: .82rem;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cmi-sub {
+  font-size: .72rem;
+  color: var(--muted);
+}
+
+/* ---------- Aspirasi Portal & Mode Tabs ---------- */
+.aspirasi-card {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  padding: 2.2rem;
+  border: 1px solid var(--line-soft);
+  box-shadow: var(--shadow-sm);
+}
+.aspirasi-header {
+  margin-bottom: 1.4rem;
+  border-bottom: 1px solid var(--line-soft);
+  padding-bottom: 1rem;
+}
+.aspirasi-mode-switch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .6rem;
+  background: var(--paper);
+  border-radius: 14px;
+  padding: .35rem;
+  margin-bottom: 1.4rem;
+}
+.mode-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  padding: .75rem 1rem;
+  border-radius: 10px;
+  font-size: .85rem;
+  font-weight: 800;
+  color: var(--muted);
+  transition: .22s var(--ease);
+}
+.mode-tab.active {
+  background: #fff;
+  color: var(--red);
+  box-shadow: 0 4px 14px rgba(32,8,14,.09);
+}
+.mode-tab:hover:not(.active) {
+  color: var(--ink);
+}
+.anonim-alert {
+  display: flex;
+  gap: .75rem;
+  align-items: flex-start;
+  background: rgba(242,163,60,.12);
+  border: 1px solid rgba(242,163,60,.4);
+  color: #7A4B00;
+  font-size: .82rem;
+  line-height: 1.5;
+  padding: .9rem 1.1rem;
+  border-radius: 12px;
+  margin-bottom: 1.4rem;
+}
+.anonim-alert svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.form-footer-options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .6rem;
+  font-size: .78rem;
+  color: var(--muted);
+  margin-top: 1rem;
+}
+.gform-alt-link {
+  color: var(--red);
+  font-weight: 800;
+  transition: .2s;
+}
+.gform-alt-link:hover {
+  text-decoration: underline;
+}
+
+@media(max-width:640px) {
+  .galeri-filter-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .filter-controls-group {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+  .custom-select-wrapper {
+    width: 100%;
+  }
+  .custom-select-menu {
+    min-width: 100%;
+  }
+  .search-box {
+    width: 100%;
+    min-width: 100%;
+  }
+  .chip-row {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+  }
+  .chip {
+    padding: .48rem .95rem;
+    font-size: .8rem;
+  }
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
 }

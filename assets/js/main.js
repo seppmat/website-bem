@@ -122,8 +122,8 @@ function renderChrome() {
             </div>
           </div>
           <div class="footer-bottom">
-            <span>&copy; 2024 ${ORG.namaPanjang}. The Academic Vanguard.</span>
-            <span>Dikembangkan oleh Kementerian Komunikasi & Digital</span>
+            <span>&copy; 2026 ${ORG.namaPanjang}. Kabinet Aksarakestra.</span>
+            <span>Dikembangkan oleh Kementerian Pendidikan, Riset, dan Teknologi</span>
           </div>
         </div>
       </footer>
@@ -186,26 +186,11 @@ function initCounters() {
 function initChipSlider(rowId, onChange) {
   const row = document.getElementById(rowId);
   if (!row) return;
-  const indicator = document.createElement("span");
-  indicator.className = "chip-indicator";
-  row.prepend(indicator);
-
-  const move = chip => {
-    indicator.style.left = chip.offsetLeft + "px";
-    indicator.style.width = chip.offsetWidth + "px";
-  };
-  const active = row.querySelector(".chip.active") || row.querySelector(".chip");
-  requestAnimationFrame(() => move(active));
-  window.addEventListener("resize", () => {
-    const a = row.querySelector(".chip.active");
-    if (a) move(a);
-  });
 
   row.querySelectorAll(".chip").forEach(chip => {
     chip.addEventListener("click", () => {
       row.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
       chip.classList.add("active");
-      move(chip);
       onChange(chip.dataset.kategori);
     });
   });
@@ -318,23 +303,314 @@ function personCard(nama, role) {
     </div>`;
 }
 
-/* ---------- Beranda ---------- */
+/* ---------- Custom Styled Dropdown (Kementerian) ---------- */
+function initCustomSelect(wrapperId, onSelectChange) {
+  const wrapper = document.getElementById(wrapperId);
+  if (!wrapper) return;
+  const trigger = wrapper.querySelector(".custom-select-btn");
+  const textLabel = wrapper.querySelector(".cs-text");
+  const menu = wrapper.querySelector(".custom-select-menu");
+  if (!trigger || !menu) return;
+
+  // Build items
+  const items = [
+    { id: "semua", nama: "Semua Kementerian", desc: "Tampilkan seluruh agenda" },
+    { id: "umum", nama: "Umum / Presidium", desc: "Agenda bersama atau pimpinan" }
+  ].concat(KEMENTERIAN.map(k => ({
+    id: k.id,
+    nama: k.nama,
+    desc: `Kementerian ${k.nama}`
+  })));
+
+  menu.innerHTML = items.map(item => `
+    <div class="custom-select-opt ${item.id === 'semua' ? 'selected' : ''}" data-val="${item.id}" role="option">
+      <div class="opt-left">
+        <span class="opt-name">${item.nama}</span>
+        <span class="opt-desc">${item.desc}</span>
+      </div>
+      <svg class="opt-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+  `).join("");
+
+  const toggle = (force) => {
+    const isExpanded = trigger.getAttribute("aria-expanded") === "true";
+    const nextState = typeof force === "boolean" ? force : !isExpanded;
+    trigger.setAttribute("aria-expanded", nextState);
+    menu.classList.toggle("open", nextState);
+  };
+
+  trigger.addEventListener("click", (e) => {
+    e.stopPropagation();
+    // Tutup dropdown lain jika ada
+    document.querySelectorAll(".custom-select-menu.open").forEach(m => {
+      if (m !== menu) {
+        m.classList.remove("open");
+        const t = m.previousElementSibling;
+        if (t) t.setAttribute("aria-expanded", "false");
+      }
+    });
+    toggle();
+  });
+
+  menu.querySelectorAll(".custom-select-opt").forEach(opt => {
+    opt.addEventListener("click", () => {
+      menu.querySelectorAll(".custom-select-opt").forEach(o => o.classList.remove("selected"));
+      opt.classList.add("selected");
+      const val = opt.dataset.val;
+      const found = items.find(it => it.id === val);
+      if (textLabel && found) textLabel.textContent = found.nama;
+      toggle(false);
+      if (typeof onSelectChange === "function") onSelectChange(val);
+    });
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!wrapper.contains(e.target)) {
+      toggle(false);
+    }
+  });
+}
+
+/* ---------- Beranda (Calendar of Events Widget) ---------- */
+let currentCalYear = 2026;
+let currentCalMonth = 9; // 0-based: 9 = Oktober (karena event banyak di Okt 2026)
+let selectedCalDate = "2026-10-24"; // default event Leadership Summit
+
+const NAMA_BULAN = [
+  "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+  "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+];
+
 function initHome() {
-  const wrap = document.getElementById("home-kegiatan");
+  const wrap = document.getElementById("home-calendar-widget");
   if (!wrap) return;
 
-  const render = kat => {
-    const list = KEGIATAN
-      .filter(e => e.status !== "done")
-      .filter(e => kat === "semua" || e.kategori === kat)
-      .slice(0, 3);
-    wrap.innerHTML = list.length
-      ? list.map(eventCard).join("")
-      : `<div class="empty-state" style="grid-column:1/-1">Belum ada kegiatan pada kategori ini. Coba kategori lain.</div>`;
-    initReveal(); initTilt();
+  const renderCalendar = () => {
+    const firstDay = new Date(currentCalYear, currentCalMonth, 1).getDay(); // 0: Minggu
+    const totalDays = new Date(currentCalYear, currentCalMonth + 1, 0).getDate();
+
+    // Map events in this month (baik single date maupun rentang periode)
+    const monthKey = `${currentCalYear}-${String(currentCalMonth + 1).padStart(2, "0")}`;
+    const startOfMonth = `${monthKey}-01`;
+    const endOfMonth = `${monthKey}-${String(totalDays).padStart(2, "0")}`;
+
+    const eventsThisMonth = KEGIATAN.filter(k => {
+      if (k.endDateStr) {
+        return (k.dateStr <= endOfMonth && k.endDateStr >= startOfMonth);
+      }
+      return k.dateStr && k.dateStr.startsWith(monthKey);
+    });
+
+    let daysHtml = "";
+    // Offset hari kosong sebelum tanggal 1
+    for (let i = 0; i < firstDay; i++) {
+      daysHtml += `<div class="cal-day empty"></div>`;
+    }
+
+    // Hari 1 s.d. totalDays
+    for (let d = 1; d <= totalDays; d++) {
+      const fullDateStr = `${monthKey}-${String(d).padStart(2, "0")}`;
+      
+      // Cek apakah tanggal d masuk dalam agenda (single date atau dalam rentang periode)
+      const dayEvents = KEGIATAN.filter(k => {
+        if (k.endDateStr) {
+          return fullDateStr >= k.dateStr && fullDateStr <= k.endDateStr;
+        }
+        return k.dateStr === fullDateStr;
+      });
+
+      const hasEvent = dayEvents.length > 0;
+      const isSelected = selectedCalDate === fullDateStr;
+      const hasPeriodEvent = dayEvents.some(k => k.endDateStr);
+      const isPeriodStart = dayEvents.some(k => k.dateStr === fullDateStr);
+      const isPeriodEnd = dayEvents.some(k => k.endDateStr === fullDateStr);
+
+      // Status indicator classes
+      let statusDot = "";
+      if (hasEvent) {
+        const topEv = dayEvents.find(k => !k.endDateStr) || dayEvents[0];
+        statusDot = `<span class="cal-dot ${topEv.status || 'upcoming'}"></span>`;
+      }
+
+      let rangeCls = "";
+      if (hasPeriodEvent) {
+        rangeCls = "in-range";
+        if (isPeriodStart) rangeCls += " range-start";
+        if (isPeriodEnd) rangeCls += " range-end";
+      }
+
+      daysHtml += `
+        <button type="button" class="cal-day ${hasEvent ? 'has-event' : ''} ${rangeCls} ${isSelected ? 'selected' : ''}" 
+                data-date="${fullDateStr}">
+          <span class="day-num">${d}</span>
+          ${statusDot}
+        </button>
+      `;
+    }
+
+    // Filter event terpilih pada tanggal yang diklik
+    const selectedEvents = KEGIATAN.filter(k => {
+      if (k.endDateStr) {
+        return selectedCalDate >= k.dateStr && selectedCalDate <= k.endDateStr;
+      }
+      return k.dateStr === selectedCalDate;
+    });
+    let detailPaneHtml = "";
+
+    if (selectedEvents.length > 0) {
+      detailPaneHtml = selectedEvents.map(ev => {
+        const [label, cls] = STATUS_LABEL[ev.status] || ["Info", ""];
+        const kemObj = KEMENTERIAN.find(k => k.id === ev.kementerian);
+        return `
+          <div class="cal-event-card">
+            <div class="cal-event-top">
+              <span class="event-status ${cls}">${label}</span>
+              <span class="cal-event-tag">${kemObj ? kemObj.nama : 'BEM KEMA'}</span>
+            </div>
+            <h3 class="cal-event-title">${ev.judul}</h3>
+            <p class="cal-event-desc">${ev.desc}</p>
+            <div class="cal-event-meta-grid">
+              <div>${ICONS.calendar} <span>${ev.tanggal}</span></div>
+              <div><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> <span>${ev.waktu || 'Konfirmasi'}</span></div>
+              <div>${ICONS.pin} <span>${ev.lokasi}</span></div>
+            </div>
+            <div class="cal-event-foot">
+              <a href="kegiatan.html" class="btn btn-red" style="padding:.55rem 1.1rem;font-size:.82rem">
+                Lihat di Agenda ${ICONS.arrow}
+              </a>
+            </div>
+          </div>
+        `;
+      }).join("");
+    } else {
+      // Tampilkan agenda mendatang lainnya di bulan ini atau umum
+      detailPaneHtml = `
+        <div class="cal-empty-pane">
+          <div class="cal-empty-icon">${ICONS.calendar}</div>
+          <h4>Tidak ada agenda di tanggal ini</h4>
+          <p>Silakan pilih tanggal yang memiliki titik penanda (agenda terjadwal), atau jelajahi kegiatan di bulan lainnya.</p>
+          <div style="margin-top:1.4rem">
+            <span class="eyebrow" style="font-size:.65rem">Agenda Bulan ${NAMA_BULAN[currentCalMonth]}</span>
+            <div class="cal-upcoming-list">
+              ${eventsThisMonth.length > 0 ? eventsThisMonth.map(e => `
+                <div class="cal-mini-item" onclick="selectCalendarDate('${e.dateStr}')">
+                  <div class="cmi-date">${e.tanggal.split(" ")[0]}</div>
+                  <div class="cmi-body">
+                    <span class="cmi-title">${e.judul}</span>
+                    <span class="cmi-sub">${e.lokasi}</span>
+                  </div>
+                </div>
+              `).join("") : '<p style="font-size:.82rem;color:var(--muted)">Belum ada agenda terdaftar di bulan ini.</p>'}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    let periodBannerHtml = "";
+    const activePeriodEvents = eventsThisMonth.filter(k => k.endDateStr);
+    if (activePeriodEvents.length > 0) {
+      periodBannerHtml = `
+        <div class="cal-period-banner">
+          <div class="cpb-badge"><span class="pulse-dot"></span> Proker Sepanjang Bulan</div>
+          ${activePeriodEvents.map(pe => `
+            <div class="cpb-item" onclick="selectCalendarDate('${pe.dateStr}')">
+              <span class="cpb-title">${pe.judul}</span>
+              <span class="cpb-range">${pe.tanggal}</span>
+            </div>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    wrap.innerHTML = `
+      <div class="calendar-layout">
+        <!-- Panel Kiri: Grid Kalender Interaktif -->
+        <div class="cal-grid-panel">
+          <div class="cal-header">
+            <div class="cal-month-title">
+              <h3>${NAMA_BULAN[currentCalMonth]} <span class="year">${currentCalYear}</span></h3>
+              <span class="cal-badge-count">${eventsThisMonth.length} Agenda</span>
+            </div>
+            <div class="cal-nav-btns">
+              <button type="button" class="cal-btn-prev" aria-label="Bulan sebelumnya">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+              <button type="button" class="cal-btn-next" aria-label="Bulan berikutnya">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m9 18 6-6-6-6"/></svg>
+              </button>
+            </div>
+          </div>
+
+          ${periodBannerHtml}
+
+          <div class="cal-weekdays">
+            <span>Min</span><span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span>
+          </div>
+
+          <div class="cal-days-grid" id="cal-days-container">
+            ${daysHtml}
+          </div>
+
+          <div class="cal-legend">
+            <div><span class="cal-range-sample"></span> Periode Berjalan</div>
+            <div><span class="cal-dot open"></span> Agenda Spesifik</div>
+            <div><span class="cal-dot done"></span> Selesai</div>
+          </div>
+        </div>
+
+        <!-- Panel Kanan: Detail Agenda Tanggal Terpilih -->
+        <div class="cal-detail-panel">
+          <div class="cal-detail-header">
+            <span class="eyebrow">Agenda Terpilih</span>
+            <div class="selected-date-label">
+              ${selectedCalDate}
+            </div>
+          </div>
+          <div class="cal-detail-body">
+            ${detailPaneHtml}
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Event listener navigasi bulan
+    wrap.querySelector(".cal-btn-prev").addEventListener("click", () => {
+      currentCalMonth--;
+      if (currentCalMonth < 0) {
+        currentCalMonth = 11;
+        currentCalYear--;
+      }
+      renderCalendar();
+    });
+
+    wrap.querySelector(".cal-btn-next").addEventListener("click", () => {
+      currentCalMonth++;
+      if (currentCalMonth > 11) {
+        currentCalMonth = 0;
+        currentCalYear++;
+      }
+      renderCalendar();
+    });
+
+    // Event listener klik tanggal
+    wrap.querySelectorAll(".cal-day:not(.empty)").forEach(btn => {
+      btn.addEventListener("click", () => {
+        selectedCalDate = btn.dataset.date;
+        renderCalendar();
+      });
+    });
   };
-  initChipSlider("home-filter", render);
-  render("semua");
+
+  window.selectCalendarDate = (dateStr) => {
+    selectedCalDate = dateStr;
+    const parts = dateStr.split("-");
+    currentCalYear = parseInt(parts[0], 10);
+    currentCalMonth = parseInt(parts[1], 10) - 1;
+    renderCalendar();
+  };
+
+  renderCalendar();
 
   /* preview kemenko di beranda */
   const kmWrap = document.getElementById("home-kemenko");
@@ -350,6 +626,12 @@ function initKegiatan() {
   const searchInput = document.getElementById("kegiatan-search");
   const resultInfo = document.getElementById("kegiatan-result");
   let kategori = "semua";
+  let kemFilter = "semua";
+
+  initCustomSelect("kegiatan-select-wrapper", (val) => {
+    kemFilter = val;
+    render();
+  });
 
   /* jumlah per kategori pada chip */
   document.querySelectorAll("#kegiatan-filter .chip").forEach(chip => {
@@ -359,45 +641,52 @@ function initKegiatan() {
   });
 
   const render = () => {
-    const q = (searchInput.value || "").toLowerCase();
-    const list = KEGIATAN.filter(e =>
-      (kategori === "semua" || e.kategori === kategori) &&
-      (e.judul.toLowerCase().includes(q) || e.desc.toLowerCase().includes(q))
-    );
+    const q = (searchInput ? searchInput.value || "" : "").toLowerCase();
+    const list = KEGIATAN.filter(e => {
+      const matchKategori = (kategori === "semua" || e.kategori === kategori);
+      const matchKem = (kemFilter === "semua" || e.kementerian === kemFilter);
+      const matchQuery = (e.judul.toLowerCase().includes(q) || e.desc.toLowerCase().includes(q));
+      return matchKategori && matchKem && matchQuery;
+    });
+
     if (resultInfo) resultInfo.textContent = `Menampilkan ${list.length} kegiatan`;
     wrap.innerHTML = list.length
       ? list.map(eventCard).join("")
-      : `<div class="empty-state" style="grid-column:1/-1">Tidak ada kegiatan yang cocok dengan pencarianmu. Coba kata kunci atau kategori lain.</div>`;
+      : `<div class="empty-state" style="grid-column:1/-1">Tidak ada kegiatan yang cocok dengan kriteria filter atau pencarianmu. Coba pilih kementerian lain.</div>`;
     initReveal(); initTilt();
   };
 
   initChipSlider("kegiatan-filter", kat => { kategori = kat; render(); });
-  searchInput.addEventListener("input", render);
+  if (searchInput) searchInput.addEventListener("input", render);
   render();
 }
 
 /* ---------- Galeri ---------- */
-const KATEGORI_LABEL = {
-  "rapat-kerja": "Rapat Kerja", "seminar": "Seminar",
-  "aksi-sosial": "Aksi Sosial", "penristek": "Penristek"
-};
-
 function initGaleri() {
   const wrap = document.getElementById("galeri-grid");
   if (!wrap) return;
   let kategori = "semua";
+  let kemFilter = "semua";
+
+  initCustomSelect("galeri-select-wrapper", (val) => {
+    kemFilter = val;
+    render();
+  });
 
   const render = () => {
-    const list = GALERI.filter(g => kategori === "semua" || g.kategori === kategori);
+    const list = GALERI.filter(g =>
+      (kategori === "semua" || g.kategori === kategori) &&
+      (kemFilter === "semua" || g.kementerian === kemFilter)
+    );
     wrap.innerHTML = list.length
       ? list.map(g => `
         <div class="g-item ${g.size} reveal" data-caption="${g.caption}" data-tone="${g.tone}"
              role="button" tabindex="0" aria-label="Perbesar: ${g.caption}">
           <div class="img-ph ${g.tone}">${ICONS.image}</div>
-          <span class="tag">${KATEGORI_LABEL[g.kategori] || g.kategori}</span>
+          <span class="tag">${g.kementerian === 'umum' ? 'Kabinet' : (KEMENTERIAN.find(k=>k.id===g.kementerian)?.nama || g.kementerian)}</span>
           <div class="cap">${g.caption}</div>
         </div>`).join("")
-      : `<div class="empty-state" style="grid-column:1/-1">Belum ada dokumentasi pada kategori ini.</div>`;
+      : `<div class="empty-state" style="grid-column:1/-1">Belum ada dokumentasi pada kategori/kementerian ini. Silakan pilih kementerian lain.</div>`;
     initReveal();
     wrap.querySelectorAll(".g-item").forEach(item => {
       const open = () => openLightbox(item.dataset.caption, item.dataset.tone);
@@ -542,11 +831,53 @@ function initKementerian() {
         </div>
         <div style="max-width:840px">
           ${kem.proker.map((p, i) => `
-            <div class="proker-item reveal">
+            <div class="proker-item reveal" id="proker-${i}">
               <div class="idx">${String(i + 1).padStart(2, "0")}</div>
-              <div>
-                <h4>${p.nama}</h4>
-                <p>${p.desc}</p>
+              <div class="proker-content">
+                <div class="proker-header" onclick="toggleProker(${i})">
+                  <div>
+                    <h4>${p.nama}</h4>
+                    <p>${p.desc}</p>
+                  </div>
+                  <button class="proker-toggle-btn" aria-label="Lihat detail">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </button>
+                </div>
+                <div class="proker-detail" id="proker-detail-${i}" style="display:none">
+                  <div class="proker-meta-grid">
+                    <div class="proker-meta-item">
+                      <span class="proker-meta-label">Tujuan Kegiatan</span>
+                      <span class="proker-meta-value">${p.tujuan || '-'}</span>
+                    </div>
+                    <div class="proker-meta-item">
+                      <span class="proker-meta-label">Sasaran Peserta</span>
+                      <span class="proker-meta-value">${p.sasaran || '-'}</span>
+                    </div>
+                    <div class="proker-meta-item">
+                      <span class="proker-meta-label">Jumlah Peserta</span>
+                      <span class="proker-meta-value">${p.jumlahPeserta || '-'}</span>
+                    </div>
+                    <div class="proker-meta-item">
+                      <span class="proker-meta-label">Hasil / Capaian</span>
+                      <span class="proker-meta-value">${p.hasil || '-'}</span>
+                    </div>
+                    <div class="proker-meta-item proker-meta-full">
+                      <span class="proker-meta-label">Dampak Kegiatan</span>
+                      <span class="proker-meta-value">${p.dampak || '-'}</span>
+                    </div>
+                  </div>
+                  ${p.dokumentasi && p.dokumentasi.length ? `
+                    <div style="margin-top:1.2rem">
+                      <span class="proker-meta-label" style="display:block;margin-bottom:.7rem">Dokumentasi</span>
+                      <div class="proker-docs-grid">
+                        ${p.dokumentasi.map(doc => `
+                          <div class="proker-doc-item">
+                            <div class="img-ph dark">${ICONS.image}</div>
+                            <span>${doc}</span>
+                          </div>`).join('')}
+                      </div>
+                    </div>` : ''}
+                </div>
               </div>
             </div>`).join("")}
         </div>
@@ -601,7 +932,44 @@ function initKontak() {
   });
 }
 
+/* ---------- Mode Aspirasi Terbuka vs Anonim ---------- */
+function setAspirasiMode(mode) {
+  const btnTerbuka = document.getElementById("btn-mode-terbuka");
+  const btnAnonim = document.getElementById("btn-mode-anonim");
+  const identitasFields = document.getElementById("identitas-fields");
+  const anonimNotice = document.getElementById("anonim-notice");
+  const cfNama = document.getElementById("cf-nama");
+  const cfEmail = document.getElementById("cf-email");
+
+  if (!btnTerbuka || !btnAnonim || !identitasFields) return;
+
+  if (mode === "anonim") {
+    btnTerbuka.classList.remove("active");
+    btnAnonim.classList.add("active");
+    identitasFields.style.display = "none";
+    if (anonimNotice) anonimNotice.style.display = "flex";
+    if (cfNama) cfNama.removeAttribute("required");
+    if (cfEmail) cfEmail.removeAttribute("required");
+  } else {
+    btnAnonim.classList.remove("active");
+    btnTerbuka.classList.add("active");
+    identitasFields.style.display = "block";
+    if (anonimNotice) anonimNotice.style.display = "none";
+    if (cfNama) cfNama.setAttribute("required", "required");
+    if (cfEmail) cfEmail.setAttribute("required", "required");
+  }
+}
+
 /* ---------- Boot ---------- */
+function toggleProker(idx) {
+  const detail = document.getElementById(`proker-detail-${idx}`);
+  const item = document.getElementById(`proker-${idx}`);
+  if (!detail) return;
+  const isOpen = detail.style.display !== 'none';
+  detail.style.display = isOpen ? 'none' : 'block';
+  item.classList.toggle('proker-open', !isOpen);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   renderChrome();
   initHome();
